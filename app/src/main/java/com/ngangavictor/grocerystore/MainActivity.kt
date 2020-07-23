@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import com.ngangavictor.grocerystore.categories.CategoriesActivity
 import com.ngangavictor.grocerystore.login.LoginActivity
 import com.ngangavictor.grocerystore.reset.ResetPasswordActivity
 
@@ -33,6 +34,10 @@ class MainActivity : AppCompatActivity() {
 
         textViewResetPassword.setOnClickListener {
             startActivity(Intent(this, ResetPasswordActivity::class.java))
+        }
+
+        buttonRegister.setOnClickListener {
+            startActivity(Intent(this,CategoriesActivity::class.java))
         }
     }
 }
