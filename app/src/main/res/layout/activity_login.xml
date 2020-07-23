@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    tools:context=".MainActivity">
-
+    android:backgroundTint="@color/colorWhite"
+    tools:context=".login.LoginActivity">
 
     <ImageView
         android:id="@+id/imageView"
@@ -42,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Please register for an account"
+                android:text="Please login to your account"
                 android:textAlignment="center" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -80,14 +79,14 @@
                 android:textAlignment="textEnd" />
 
             <Button
-                android:id="@+id/buttonRegister"
+                android:id="@+id/buttonLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="10dp"
                 android:backgroundTint="@color/colorPrimaryDark"
                 android:textColor="@color/colorWhite"
-                android:text="REGISTER" />
+                android:text="LOGIN" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -98,20 +97,19 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
         android:layout_marginTop="20dp"
-        android:text="Already have an account?"
+        android:text="Don't have an account?"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
     <TextView
-        android:id="@+id/textViewLogin"
+        android:id="@+id/textViewRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="1dp"
         android:layout_marginTop="20dp"
-        android:text="Login now"
-        android:textColor="@color/colorWhite"
+        android:text="Register now"
+        android:textColor="@color/colorPrimary"
         app:layout_constraintStart_toEndOf="@+id/textView4"
         app:layout_constraintTop_toBottomOf="@+id/cardView" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
