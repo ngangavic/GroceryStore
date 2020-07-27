@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@color/colorWhite"
     tools:context=".MainActivity">
 
 
@@ -54,6 +54,7 @@
                     android:id="@+id/editTextEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
                     android:drawableStart="@drawable/ic_email"
                     android:hint="Email address" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -67,6 +68,7 @@
                     android:id="@+id/editTextPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="textPassword"
                     android:drawableStart="@drawable/ic_lock"
                     android:hint="Password" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -109,7 +111,7 @@
         android:layout_marginStart="1dp"
         android:layout_marginTop="20dp"
         android:text="Login now"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/colorPrimary"
         app:layout_constraintStart_toEndOf="@+id/textView4"
         app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
