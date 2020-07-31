@@ -85,7 +85,8 @@ class MainActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
 
                         auth.currentUser!!.sendEmailVerification()
-                        database.getReference("green-orchard").child("users").child(auth.currentUser!!.uid)
+                        database.getReference("green-orchard").child("users")
+                            .child(auth.currentUser!!.uid)
                             .setValue(RegUser(email, SimpleDateFormat("dd/M/yyyy").format(Date())))
                             .addOnSuccessListener {
                                 Snackbar.make(
@@ -118,7 +119,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        if (auth.currentUser!=null) {
+        if (auth.currentUser != null) {
             if (auth.currentUser!!.isEmailVerified) {
                 startActivity(Intent(this, CategoriesActivity::class.java))
             } else {

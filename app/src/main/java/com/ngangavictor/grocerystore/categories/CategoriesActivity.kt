@@ -1,26 +1,26 @@
 package com.ngangavictor.grocerystore.categories
 
 import android.os.Bundle
-import android.view.Menu
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.ActionBar
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.navigation.NavigationView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import com.google.android.material.navigation.NavigationView
 import com.ngangavictor.grocerystore.R
 
 class CategoriesActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var textViewTitle:TextView
+    private lateinit var textViewTitle: TextView
+    private lateinit var imageViewOpenDrawer: ImageView
+    private lateinit var imageViewNotifications: ImageView
+    private lateinit var imageViewProfile: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,8 +45,20 @@ class CategoriesActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowCustomEnabled(true)
         supportActionBar?.setCustomView(R.layout.custom_action_bar)
         supportActionBar?.elevation = 0F
-        val view = supportActionBar?.customView
-//        textViewTitle = view!!.findViewById(R.id.textViewTitle)
+        val view = supportActionBar!!.customView
+        textViewTitle = view.findViewById(R.id.textViewTitle)
+        imageViewOpenDrawer = view.findViewById(R.id.imageViewOpenDrawer)
+        imageViewNotifications = view.findViewById(R.id.imageViewNotifications)
+        imageViewProfile = view.findViewById(R.id.imageViewProfile)
+
+        imageViewOpenDrawer.setOnClickListener {
+            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                drawerLayout.closeDrawer(GravityCompat.START)
+            } else {
+                drawerLayout.openDrawer(GravityCompat.START)
+            }
+        }
+
     }
 
 //    override fun onCreateOptionsMenu(menu: Menu): Boolean {

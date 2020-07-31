@@ -96,7 +96,7 @@ class LoginActivity : AppCompatActivity() {
                     } else {
                         Snackbar.make(
                             findViewById(android.R.id.content),
-                            "Login failed:"+task.exception!!.message,
+                            "Login failed:" + task.exception!!.message,
                             Snackbar.LENGTH_SHORT
                         ).show()
                     }
