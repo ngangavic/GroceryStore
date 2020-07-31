@@ -12,7 +12,7 @@
         <activity
             android:name=".categories.CategoriesActivity"
             android:label="@string/title_activity_categories"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/CategoryTheme"/>
         <activity android:name=".reset.ResetPasswordActivity" />
         <activity
             android:name=".login.LoginActivity"

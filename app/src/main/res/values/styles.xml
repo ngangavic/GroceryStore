@@ -15,6 +15,16 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+<!--    category theme-->
+    <style name="CategoryTheme" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/colorWhite</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <!--        <item name="android:windowLightStatusBar">true</item>-->
+<!--        <item name="android:actionBarSize">80dp</item>-->
+<!--        <item name="actionBarSize">80dp</item>-->
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
