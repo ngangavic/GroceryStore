@@ -1,9 +1,12 @@
 package com.ngangavictor.grocerystore.categories
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -16,7 +19,13 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.ngangavictor.grocerystore.R
+import com.ngangavictor.grocerystore.login.LoginActivity
 
 class CategoriesActivity : AppCompatActivity() {
 
@@ -42,6 +51,9 @@ class CategoriesActivity : AppCompatActivity() {
     private lateinit var recyclerViewList: RecyclerView
     private lateinit var recyclerViewCart: RecyclerView
 
+    private lateinit var auth: FirebaseAuth
+    private lateinit var database: FirebaseDatabase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_categories)
@@ -61,6 +73,9 @@ class CategoriesActivity : AppCompatActivity() {
         recyclerViewSearch=findViewById(R.id.recyclerViewSearch)
         recyclerViewList=findViewById(R.id.recyclerViewList)
         recyclerViewCart=findViewById(R.id.recyclerViewCart)
+
+        auth = Firebase.auth
+        database = Firebase.database
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
@@ -94,6 +109,41 @@ class CategoriesActivity : AppCompatActivity() {
         }
 
         clickListeners()
+
+        navView.setNavigationItemSelectedListener (object :
+            NavigationView.OnNavigationItemSelectedListener{
+            override fun onNavigationItemSelected(item: MenuItem): Boolean {
+                when(item.itemId){
+                    R.id.nav_home->{
+                        return true
+                    }
+                    R.id.nav_fruits->{
+                        return true
+                    }
+                    R.id.nav_meat->{
+                        return true
+                    }
+                    R.id.nav_dairy->{
+                        return true
+                    }
+                    R.id.nav_account->{
+                        return true
+                    }
+                    R.id.nav_about->{
+                        return true
+                    }
+                    R.id.nav_logout->{
+                        auth.signOut()
+                        startActivity(Intent(this@CategoriesActivity,LoginActivity::class.java))
+                        finish()
+                        return true
+                    }
+                }
+                return false
+            }
+
+
+        })
 
     }
 
@@ -136,12 +186,6 @@ class CategoriesActivity : AppCompatActivity() {
             layoutCart.visibility=View.GONE
         }
     }
-
-//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        menuInflater.inflate(R.menu.categories, menu)
-//        return true
-//    }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)

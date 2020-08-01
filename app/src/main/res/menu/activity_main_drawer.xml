@@ -3,10 +3,49 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="@string/menu_home" />
-    </group>
+    <item android:title="Home">
+        <menu>
+            <item
+                android:id="@+id/nav_home"
+                android:icon="@drawable/ic_home"
+                android:title="@string/menu_home" />
+        </menu>
+    </item>
+
+    <item android:title="Categories">
+        <menu>
+            <item
+                android:id="@+id/nav_fruits"
+                android:icon="@drawable/ic_fruit"
+                android:title="Fruits" />
+            <item
+                android:id="@+id/nav_meat"
+                android:icon="@drawable/ic_meat"
+                android:title="Meat" />
+            <item
+                android:id="@+id/nav_dairy"
+                android:icon="@drawable/ic_dairy"
+                android:title="Dairy" />
+        </menu>
+    </item>
+
+    <item android:title="Other">
+        <menu>
+            <item
+                android:id="@+id/nav_account"
+                android:icon="@drawable/ic_person"
+                android:title="My Account" />
+
+            <item
+                android:id="@+id/nav_about"
+                android:icon="@drawable/ic_info"
+                android:title="About" />
+
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_lock"
+                android:title="Logout" />
+        </menu>
+    </item>
+
 </menu>
