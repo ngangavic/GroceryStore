@@ -25,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.ngangavictor.grocerystore.R
+import com.ngangavictor.grocerystore.categories.account.AccountActivity
 import com.ngangavictor.grocerystore.login.LoginActivity
 
 class CategoriesActivity : AppCompatActivity() {
@@ -127,6 +128,8 @@ class CategoriesActivity : AppCompatActivity() {
                         return true
                     }
                     R.id.nav_account->{
+                        startActivity(Intent(this@CategoriesActivity,AccountActivity::class.java))
+                        finish()
                         return true
                     }
                     R.id.nav_about->{

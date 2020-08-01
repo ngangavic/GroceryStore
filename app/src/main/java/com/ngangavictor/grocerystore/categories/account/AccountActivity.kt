@@ -1,5 +1,6 @@
 package com.ngangavictor.grocerystore.categories.account
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -7,6 +8,7 @@ import android.widget.ImageView
 import android.widget.Switch
 import android.widget.TextView
 import com.ngangavictor.grocerystore.R
+import com.ngangavictor.grocerystore.categories.product.ProductActivity
 
 class AccountActivity : AppCompatActivity() {
 
@@ -38,5 +40,15 @@ class AccountActivity : AppCompatActivity() {
 
         buttonAdd=findViewById(R.id.buttonAdd)
 
+        clickListeners()
+
     }
+
+    private fun clickListeners(){
+        buttonAdd.setOnClickListener {
+            startActivity(Intent(this@AccountActivity,ProductActivity::class.java))
+            finish()
+        }
+    }
+
 }
