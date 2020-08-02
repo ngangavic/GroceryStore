@@ -1,5 +1,6 @@
 package com.ngangavictor.grocerystore.login
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
@@ -20,6 +21,7 @@ import com.ngangavictor.grocerystore.MainActivity
 import com.ngangavictor.grocerystore.R
 import com.ngangavictor.grocerystore.RegUser
 import com.ngangavictor.grocerystore.categories.CategoriesActivity
+import com.ngangavictor.grocerystore.categories.account.AccountActivity
 import com.ngangavictor.grocerystore.reset.ResetPasswordActivity
 import java.text.SimpleDateFormat
 import java.util.*
@@ -33,6 +35,8 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var textViewResetPassword: TextView
     private lateinit var auth: FirebaseAuth
     private lateinit var database: FirebaseDatabase
+
+    private lateinit var alert: AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -124,14 +128,14 @@ class LoginActivity : AppCompatActivity() {
                                 startActivity(
                                     Intent(
                                         this@LoginActivity,
-                                        CategoriesActivity::class.java
+                                        AccountActivity::class.java
                                     )
                                 )
                             }
                             .addOnFailureListener {
                                 Snackbar.make(
                                     findViewById(android.R.id.content),
-                                    "Login failed",
+                                    "Login failed: "+it.message,
                                     Snackbar.LENGTH_SHORT
                                 ).show()
                             }
@@ -148,6 +152,58 @@ class LoginActivity : AppCompatActivity() {
     private fun verifyPassword(password: String): Boolean {
         return password.length < 6
     }
+
+    private fun completeProfile() {
+        database.getReference("green-orchard").child("users")
+            .child(auth.currentUser!!.uid)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    alert.cancel()
+                    Snackbar.make(
+                        findViewById(android.R.id.content),
+                        "Error:" + error.message,
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.child("name").exists() && snapshot.child("phone").exists()) {
+                        startActivity(Intent(this@LoginActivity, CategoriesActivity::class.java))
+                        finish()
+                        alert.cancel()
+                    } else {
+                        startActivity(Intent(this@LoginActivity, AccountActivity::class.java))
+                        finish()
+                        alert.cancel()
+                    }
+
+                }
+
+            })
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (auth.currentUser != null) {
+            loadingAlert()
+            if (auth.currentUser!!.isEmailVerified) {
+                completeProfile()
+            } else {
+                auth.currentUser!!.sendEmailVerification()
+                auth.signOut()
+                alert.cancel()
+            }
+        }
+    }
+
+    private fun loadingAlert() {
+        val alertDialog = AlertDialog.Builder(this@LoginActivity)
+        alertDialog.setCancelable(false)
+        alertDialog.setMessage("Loading ...")
+        alert = alertDialog.create()
+        alert.show()
+    }
+
 }
 
 class RegUser(var email: String, var date: String)

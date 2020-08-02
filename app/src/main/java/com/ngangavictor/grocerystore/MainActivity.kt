@@ -1,5 +1,6 @@
 package com.ngangavictor.grocerystore
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
@@ -10,10 +11,14 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.ngangavictor.grocerystore.categories.CategoriesActivity
+import com.ngangavictor.grocerystore.categories.account.AccountActivity
 import com.ngangavictor.grocerystore.login.LoginActivity
 import com.ngangavictor.grocerystore.reset.ResetPasswordActivity
 import java.text.SimpleDateFormat
@@ -28,6 +33,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var textViewResetPassword: TextView
     private lateinit var auth: FirebaseAuth
     private lateinit var database: FirebaseDatabase
+
+    private lateinit var alert: AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,7 +101,8 @@ class MainActivity : AppCompatActivity() {
                                     "Registration successful",
                                     Snackbar.LENGTH_SHORT
                                 ).show()
-                                startActivity(Intent(this, CategoriesActivity::class.java))
+                                startActivity(Intent(this@MainActivity, AccountActivity::class.java))
+                                finish()
                             }
                             .addOnFailureListener {
                                 auth.currentUser!!.delete()
@@ -117,17 +125,53 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun completeProfile(){
+        database.getReference("green-orchard").child("users")
+            .child(auth.currentUser!!.uid)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    alert.cancel()
+                    Snackbar.make(findViewById(android.R.id.content),"Error:"+error.message,Snackbar.LENGTH_LONG).show()
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.child("name").exists() && snapshot.child("phone").exists()) {
+                        startActivity(Intent(this@MainActivity, CategoriesActivity::class.java))
+                        finish()
+                    }else{
+                        startActivity(Intent(this@MainActivity, AccountActivity::class.java))
+                        finish()
+                    }
+
+                }
+
+            })
+    }
+
     override fun onStart() {
         super.onStart()
+
         if (auth.currentUser != null) {
+            loadingAlert()
             if (auth.currentUser!!.isEmailVerified) {
-                startActivity(Intent(this, CategoriesActivity::class.java))
+                completeProfile()
             } else {
+                alert.cancel()
                 auth.currentUser!!.sendEmailVerification()
                 auth.signOut()
+                Snackbar.make(findViewById(android.R.id.content),"Please verify your email",Snackbar.LENGTH_LONG).show()
             }
         }
     }
+
+    private fun loadingAlert() {
+        val alertDialog = AlertDialog.Builder(this@MainActivity)
+        alertDialog.setCancelable(false)
+        alertDialog.setMessage("Loading ...")
+        alert = alertDialog.create()
+        alert.show()
+    }
+
 }
 
 class RegUser(var email: String, var date: String)

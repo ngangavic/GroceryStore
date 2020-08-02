@@ -84,8 +84,8 @@ class AccountActivity : AppCompatActivity() {
             )
         }
 
-        getSupportActionBar()?.setDisplayHomeAsUpEnabled(true)
-        getSupportActionBar()?.setDisplayShowHomeEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.title = "Profile"
 
     }
@@ -153,9 +153,9 @@ class AccountActivity : AppCompatActivity() {
         val phone = textViewPhone.text.toString()
 
         if (name == "Username") {
-            //err
+            Snackbar.make(findViewById(android.R.id.content),"Please add a username", Snackbar.LENGTH_LONG).show()
         } else if (phone == "Phone number") {
-            //err
+            Snackbar.make(findViewById(android.R.id.content),"Please add a phone number", Snackbar.LENGTH_LONG).show()
         } else {
             loadingAlert()
             val db =
@@ -193,8 +193,28 @@ class AccountActivity : AppCompatActivity() {
                 save()
             }
             android.R.id.home -> {
-                startActivity(Intent(this@AccountActivity, CategoriesActivity::class.java))
-                finish()
+                loadingAlert()
+                database.getReference("green-orchard").child("users")
+                    .child(auth.currentUser!!.uid)
+                    .addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onCancelled(error: DatabaseError) {
+                            alert.cancel()
+                            Snackbar.make(findViewById(android.R.id.content),"Error:"+error.message,Snackbar.LENGTH_LONG).show()
+                        }
+
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            if (snapshot.child("name").exists() && snapshot.child("phone").exists()) {
+                                alert.cancel()
+                                startActivity(Intent(this@AccountActivity, CategoriesActivity::class.java))
+                                finish()
+                            }else{
+                                alert.cancel()
+                                Snackbar.make(findViewById(android.R.id.content),"Update your profile",Snackbar.LENGTH_LONG).show()
+                            }
+
+                        }
+
+                    })
             }
         }
         return super.onOptionsItemSelected(item)
