@@ -7,6 +7,9 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
@@ -17,6 +20,9 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.android.gms.tasks.Continuation
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -26,11 +32,15 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.UploadTask
+import com.google.firebase.storage.ktx.storage
 import com.ngangavictor.grocerystore.R
 import com.ngangavictor.grocerystore.categories.CategoriesActivity
 import com.ngangavictor.grocerystore.categories.product.ProductActivity
 import com.ngangavictor.grocerystore.utils.CircleImageView
 import com.squareup.picasso.Picasso
+import java.io.ByteArrayOutputStream
 
 
 class AccountActivity : AppCompatActivity() {
@@ -49,8 +59,11 @@ class AccountActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var database: FirebaseDatabase
+    private lateinit var storageRef: FirebaseStorage
 
     private lateinit var alert: AlertDialog
+
+    private lateinit var imagePath:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +83,9 @@ class AccountActivity : AppCompatActivity() {
 
         auth = Firebase.auth
         database = Firebase.database
+        storageRef = Firebase.storage
+
+        imagePath="empty"
 
         getDetails()
 
@@ -158,28 +174,90 @@ class AccountActivity : AppCompatActivity() {
             Snackbar.make(findViewById(android.R.id.content),"Please add a phone number", Snackbar.LENGTH_LONG).show()
         } else {
             loadingAlert()
-            val db =
-                database.getReference("green-orchard").child("users").child(auth.currentUser!!.uid)
-            db.child("name").setValue(name)
-            db.child("phone").setValue(phone)
-                .addOnSuccessListener {
-                    alert.cancel()
-                    Snackbar.make(
-                        findViewById(android.R.id.content),
-                        "Profile update success",
-                        Snackbar.LENGTH_LONG
-                    ).show()
-                }
-                .addOnFailureListener {
-                    alert.cancel()
-                    Snackbar.make(
-                        findViewById(android.R.id.content),
-                        "Profile update failed",
-                        Snackbar.LENGTH_LONG
-                    ).show()
-                }
+
+            if(imagePath=="empty"){
+                Toast.makeText(this@AccountActivity,"Saving",Toast.LENGTH_LONG).show()
+                val db =
+                    database.getReference("green-orchard").child("users").child(auth.currentUser!!.uid)
+                db.child("name").setValue(name)
+                db.child("phone").setValue(phone)
+                    .addOnSuccessListener {
+                        alert.cancel()
+                        Snackbar.make(
+                            findViewById(android.R.id.content),
+                            "Profile update success",
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                    }
+                    .addOnFailureListener {
+                        alert.cancel()
+                        Snackbar.make(
+                            findViewById(android.R.id.content),
+                            "Profile update failed",
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                    }
+            }else{
+                Toast.makeText(this@AccountActivity,"Uploading",Toast.LENGTH_LONG).show()
+                val byteArrayOutputStream = ByteArrayOutputStream()
+                getBitmap().compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream)
+
+                val data = byteArrayOutputStream.toByteArray()
+                val storage =storageRef.reference.child("profiles/" + auth.uid.toString())
+                val uploadTask = storage.putBytes(data)
+                uploadTask.continueWithTask { p0 ->
+                    if (!p0.isSuccessful) {
+                        p0.exception?.let {
+                            throw it
+                        }
+                    }
+                    storage.downloadUrl
+                }.addOnCompleteListener(object : OnCompleteListener<Uri> {
+                    override fun onComplete(p0: Task<Uri>) {
+                        if (p0.isSuccessful()) {
+                            val downloadUri = p0.getResult()
+
+                            val db =
+                                database.getReference("green-orchard").child("users").child(auth.currentUser!!.uid)
+                            db.child("name").setValue(name)
+                            db.child("phone").setValue(phone)
+                                db.child("profileImage").setValue(downloadUri.toString())
+                                .addOnSuccessListener {
+                                    alert.cancel()
+                                    Snackbar.make(
+                                        findViewById(android.R.id.content),
+                                        "Profile update success",
+                                        Snackbar.LENGTH_LONG
+                                    ).show()
+                                }
+                                .addOnFailureListener {
+                                    alert.cancel()
+                                    Snackbar.make(
+                                        findViewById(android.R.id.content),
+                                        "Profile update failed",
+                                        Snackbar.LENGTH_LONG
+                                    ).show()
+                                }
+
+                        } else {
+                            alert.cancel()
+                            Snackbar.make(
+                                findViewById(android.R.id.content),
+                                "Profile update failed",
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                })
+            }
+
+
         }
 
+    }
+
+    private fun getBitmap():Bitmap{
+      return (imageViewProfile.drawable as BitmapDrawable).bitmap
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -288,6 +366,7 @@ class AccountActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == 300 && resultCode == Activity.RESULT_OK) {
+            imagePath=data!!.data.toString()
             Picasso.get().load(data!!.data.toString()).transform(CircleImageView())
                 .into(imageViewProfile)
         }
@@ -311,6 +390,13 @@ class AccountActivity : AppCompatActivity() {
                     if (snapshot.child("phone").exists()){
                         textViewPhone.text=snapshot.child("phone").value.toString()
                     }
+
+                    if (snapshot.child("profileImage").exists()){
+                        Picasso.get().load(snapshot.child("profileImage").value.toString()).transform(CircleImageView())
+                            .placeholder(R.drawable.loading)
+                            .into(imageViewProfile)
+                    }
+
                     alert.cancel()
                 }
 
