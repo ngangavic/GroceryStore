@@ -101,7 +101,12 @@ class MainActivity : AppCompatActivity() {
                                     "Registration successful",
                                     Snackbar.LENGTH_SHORT
                                 ).show()
-                                startActivity(Intent(this@MainActivity, AccountActivity::class.java))
+                                startActivity(
+                                    Intent(
+                                        this@MainActivity,
+                                        AccountActivity::class.java
+                                    )
+                                )
                                 finish()
                             }
                             .addOnFailureListener {
@@ -125,20 +130,24 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun completeProfile(){
+    private fun completeProfile() {
         database.getReference("green-orchard").child("users")
             .child(auth.currentUser!!.uid)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {
                     alert.cancel()
-                    Snackbar.make(findViewById(android.R.id.content),"Error:"+error.message,Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(
+                        findViewById(android.R.id.content),
+                        "Error:" + error.message,
+                        Snackbar.LENGTH_LONG
+                    ).show()
                 }
 
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.child("name").exists() && snapshot.child("phone").exists()) {
                         startActivity(Intent(this@MainActivity, CategoriesActivity::class.java))
                         finish()
-                    }else{
+                    } else {
                         startActivity(Intent(this@MainActivity, AccountActivity::class.java))
                         finish()
                     }
@@ -159,7 +168,11 @@ class MainActivity : AppCompatActivity() {
                 alert.cancel()
                 auth.currentUser!!.sendEmailVerification()
                 auth.signOut()
-                Snackbar.make(findViewById(android.R.id.content),"Please verify your email",Snackbar.LENGTH_LONG).show()
+                Snackbar.make(
+                    findViewById(android.R.id.content),
+                    "Please verify your email",
+                    Snackbar.LENGTH_LONG
+                ).show()
             }
         }
     }

@@ -28,8 +28,8 @@
             android:id="@+id/productName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
             android:hint="Product name"
+            android:inputType="text"
             android:padding="15dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -79,8 +79,8 @@
             android:id="@+id/price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"
             android:hint="Price per quantity"
+            android:inputType="number"
             android:padding="15dp" />
     </com.google.android.material.textfield.TextInputLayout>
 

@@ -135,7 +135,7 @@ class LoginActivity : AppCompatActivity() {
                             .addOnFailureListener {
                                 Snackbar.make(
                                     findViewById(android.R.id.content),
-                                    "Login failed: "+it.message,
+                                    "Login failed: " + it.message,
                                     Snackbar.LENGTH_SHORT
                                 ).show()
                             }

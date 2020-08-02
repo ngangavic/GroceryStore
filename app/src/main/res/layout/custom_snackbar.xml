@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <TextView
         android:id="@+id/textViewTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:text="Title" />
+        android:text="Title"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/editTextInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Name" />
+        android:hint="Name"
+        android:inputType="textPersonName" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,16 +31,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
+            android:text="Cancel"
             android:textColor="@color/colorPrimary"
-            android:textStyle="bold"
-            android:text="Cancel" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/textViewDone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Done"
             android:textColor="@color/colorPrimary"
-            android:textStyle="bold"
-            android:text="Done" />
+            android:textStyle="bold" />
     </LinearLayout>
 </LinearLayout>

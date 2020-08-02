@@ -50,18 +50,26 @@ class ResetPasswordActivity : AppCompatActivity() {
         buttonReset.setOnClickListener { resetPassword() }
     }
 
-    private fun resetPassword(){
-        val email=editTextEmail.text.toString()
+    private fun resetPassword() {
+        val email = editTextEmail.text.toString()
         if (TextUtils.isEmpty(email)) {
             editTextEmail.requestFocus()
-            editTextEmail.error="Cannot be empty"
-        }else {
+            editTextEmail.error = "Cannot be empty"
+        } else {
             auth.sendPasswordResetEmail(email)
                 .addOnFailureListener {
-                    Snackbar.make(findViewById(android.R.id.content),"Error: "+it.message,Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(
+                        findViewById(android.R.id.content),
+                        "Error: " + it.message,
+                        Snackbar.LENGTH_LONG
+                    ).show()
                 }
                 .addOnSuccessListener {
-                    Snackbar.make(findViewById(android.R.id.content),"Password reset link sent to your email.",Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(
+                        findViewById(android.R.id.content),
+                        "Password reset link sent to your email.",
+                        Snackbar.LENGTH_LONG
+                    ).show()
                 }
         }
 

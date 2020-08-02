@@ -92,8 +92,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:inputType="textPersonName"
                     android:hint="Type something..."
+                    android:inputType="textPersonName"
                     app:layout_constraintTop_toBottomOf="@id/textView5" />
 
                 <androidx.recyclerview.widget.RecyclerView

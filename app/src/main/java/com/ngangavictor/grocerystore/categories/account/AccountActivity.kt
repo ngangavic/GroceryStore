@@ -20,7 +20,6 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
@@ -33,7 +32,6 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.UploadTask
 import com.google.firebase.storage.ktx.storage
 import com.ngangavictor.grocerystore.R
 import com.ngangavictor.grocerystore.categories.CategoriesActivity
@@ -63,7 +61,7 @@ class AccountActivity : AppCompatActivity() {
 
     private lateinit var alert: AlertDialog
 
-    private lateinit var imagePath:String
+    private lateinit var imagePath: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,7 +83,7 @@ class AccountActivity : AppCompatActivity() {
         database = Firebase.database
         storageRef = Firebase.storage
 
-        imagePath="empty"
+        imagePath = "empty"
 
         getDetails()
 
@@ -169,16 +167,25 @@ class AccountActivity : AppCompatActivity() {
         val phone = textViewPhone.text.toString()
 
         if (name == "Username") {
-            Snackbar.make(findViewById(android.R.id.content),"Please add a username", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(
+                findViewById(android.R.id.content),
+                "Please add a username",
+                Snackbar.LENGTH_LONG
+            ).show()
         } else if (phone == "Phone number") {
-            Snackbar.make(findViewById(android.R.id.content),"Please add a phone number", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(
+                findViewById(android.R.id.content),
+                "Please add a phone number",
+                Snackbar.LENGTH_LONG
+            ).show()
         } else {
             loadingAlert()
 
-            if(imagePath=="empty"){
-                Toast.makeText(this@AccountActivity,"Saving",Toast.LENGTH_LONG).show()
+            if (imagePath == "empty") {
+                Toast.makeText(this@AccountActivity, "Saving", Toast.LENGTH_LONG).show()
                 val db =
-                    database.getReference("green-orchard").child("users").child(auth.currentUser!!.uid)
+                    database.getReference("green-orchard").child("users")
+                        .child(auth.currentUser!!.uid)
                 db.child("name").setValue(name)
                 db.child("phone").setValue(phone)
                     .addOnSuccessListener {
@@ -197,13 +204,13 @@ class AccountActivity : AppCompatActivity() {
                             Snackbar.LENGTH_LONG
                         ).show()
                     }
-            }else{
-                Toast.makeText(this@AccountActivity,"Uploading",Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this@AccountActivity, "Uploading", Toast.LENGTH_LONG).show()
                 val byteArrayOutputStream = ByteArrayOutputStream()
                 getBitmap().compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream)
 
                 val data = byteArrayOutputStream.toByteArray()
-                val storage =storageRef.reference.child("profiles/" + auth.uid.toString())
+                val storage = storageRef.reference.child("profiles/" + auth.uid.toString())
                 val uploadTask = storage.putBytes(data)
                 uploadTask.continueWithTask { p0 ->
                     if (!p0.isSuccessful) {
@@ -218,10 +225,11 @@ class AccountActivity : AppCompatActivity() {
                             val downloadUri = p0.getResult()
 
                             val db =
-                                database.getReference("green-orchard").child("users").child(auth.currentUser!!.uid)
+                                database.getReference("green-orchard").child("users")
+                                    .child(auth.currentUser!!.uid)
                             db.child("name").setValue(name)
                             db.child("phone").setValue(phone)
-                                db.child("profileImage").setValue(downloadUri.toString())
+                            db.child("profileImage").setValue(downloadUri.toString())
                                 .addOnSuccessListener {
                                     alert.cancel()
                                     Snackbar.make(
@@ -256,8 +264,8 @@ class AccountActivity : AppCompatActivity() {
 
     }
 
-    private fun getBitmap():Bitmap{
-      return (imageViewProfile.drawable as BitmapDrawable).bitmap
+    private fun getBitmap(): Bitmap {
+        return (imageViewProfile.drawable as BitmapDrawable).bitmap
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -277,17 +285,32 @@ class AccountActivity : AppCompatActivity() {
                     .addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onCancelled(error: DatabaseError) {
                             alert.cancel()
-                            Snackbar.make(findViewById(android.R.id.content),"Error:"+error.message,Snackbar.LENGTH_LONG).show()
+                            Snackbar.make(
+                                findViewById(android.R.id.content),
+                                "Error:" + error.message,
+                                Snackbar.LENGTH_LONG
+                            ).show()
                         }
 
                         override fun onDataChange(snapshot: DataSnapshot) {
-                            if (snapshot.child("name").exists() && snapshot.child("phone").exists()) {
+                            if (snapshot.child("name").exists() && snapshot.child("phone")
+                                    .exists()
+                            ) {
                                 alert.cancel()
-                                startActivity(Intent(this@AccountActivity, CategoriesActivity::class.java))
+                                startActivity(
+                                    Intent(
+                                        this@AccountActivity,
+                                        CategoriesActivity::class.java
+                                    )
+                                )
                                 finish()
-                            }else{
+                            } else {
                                 alert.cancel()
-                                Snackbar.make(findViewById(android.R.id.content),"Update your profile",Snackbar.LENGTH_LONG).show()
+                                Snackbar.make(
+                                    findViewById(android.R.id.content),
+                                    "Update your profile",
+                                    Snackbar.LENGTH_LONG
+                                ).show()
                             }
 
                         }
@@ -366,33 +389,38 @@ class AccountActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == 300 && resultCode == Activity.RESULT_OK) {
-            imagePath=data!!.data.toString()
+            imagePath = data!!.data.toString()
             Picasso.get().load(data!!.data.toString()).transform(CircleImageView())
                 .into(imageViewProfile)
         }
     }
 
-    private fun getDetails(){
+    private fun getDetails() {
         loadingAlert()
         database.getReference("green-orchard").child("users")
             .child(auth.currentUser!!.uid)
-            .addListenerForSingleValueEvent(object :ValueEventListener{
+            .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {
                     alert.cancel()
-                    Snackbar.make(findViewById(android.R.id.content),"Error:"+error.message,Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(
+                        findViewById(android.R.id.content),
+                        "Error:" + error.message,
+                        Snackbar.LENGTH_LONG
+                    ).show()
                 }
 
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.child("name").exists()){
-                        textViewName.text=snapshot.child("name").value.toString()
+                    if (snapshot.child("name").exists()) {
+                        textViewName.text = snapshot.child("name").value.toString()
                     }
 
-                    if (snapshot.child("phone").exists()){
-                        textViewPhone.text=snapshot.child("phone").value.toString()
+                    if (snapshot.child("phone").exists()) {
+                        textViewPhone.text = snapshot.child("phone").value.toString()
                     }
 
-                    if (snapshot.child("profileImage").exists()){
-                        Picasso.get().load(snapshot.child("profileImage").value.toString()).transform(CircleImageView())
+                    if (snapshot.child("profileImage").exists()) {
+                        Picasso.get().load(snapshot.child("profileImage").value.toString())
+                            .transform(CircleImageView())
                             .placeholder(R.drawable.loading)
                             .into(imageViewProfile)
                     }

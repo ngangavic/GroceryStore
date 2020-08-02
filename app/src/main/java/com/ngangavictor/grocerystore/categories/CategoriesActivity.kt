@@ -6,7 +6,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -59,21 +58,21 @@ class CategoriesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_categories)
 
-        imageViewSearch=findViewById(R.id.imageViewSearch)
-        imageViewList=findViewById(R.id.imageViewList)
-        imageViewBasket=findViewById(R.id.imageViewBasket)
+        imageViewSearch = findViewById(R.id.imageViewSearch)
+        imageViewList = findViewById(R.id.imageViewList)
+        imageViewBasket = findViewById(R.id.imageViewBasket)
 
-        layoutSearch=findViewById(R.id.layoutSearch)
-        layoutList=findViewById(R.id.layoutList)
-        layoutCart=findViewById(R.id.layoutCart)
+        layoutSearch = findViewById(R.id.layoutSearch)
+        layoutList = findViewById(R.id.layoutList)
+        layoutCart = findViewById(R.id.layoutCart)
 
-        floatingActionButtonCancelCart=findViewById(R.id.floatingActionButtonCancelCart)
-        floatingActionButtonCancelList=findViewById(R.id.floatingActionButtonCancelList)
-        floatingActionButtonCancelSearch=findViewById(R.id.floatingActionButtonCancelSearch)
+        floatingActionButtonCancelCart = findViewById(R.id.floatingActionButtonCancelCart)
+        floatingActionButtonCancelList = findViewById(R.id.floatingActionButtonCancelList)
+        floatingActionButtonCancelSearch = findViewById(R.id.floatingActionButtonCancelSearch)
 
-        recyclerViewSearch=findViewById(R.id.recyclerViewSearch)
-        recyclerViewList=findViewById(R.id.recyclerViewList)
-        recyclerViewCart=findViewById(R.id.recyclerViewCart)
+        recyclerViewSearch = findViewById(R.id.recyclerViewSearch)
+        recyclerViewList = findViewById(R.id.recyclerViewList)
+        recyclerViewCart = findViewById(R.id.recyclerViewCart)
 
         auth = Firebase.auth
         database = Firebase.database
@@ -111,33 +110,33 @@ class CategoriesActivity : AppCompatActivity() {
 
         clickListeners()
 
-        navView.setNavigationItemSelectedListener (object :
-            NavigationView.OnNavigationItemSelectedListener{
+        navView.setNavigationItemSelectedListener(object :
+            NavigationView.OnNavigationItemSelectedListener {
             override fun onNavigationItemSelected(item: MenuItem): Boolean {
-                when(item.itemId){
-                    R.id.nav_home->{
+                when (item.itemId) {
+                    R.id.nav_home -> {
                         return true
                     }
-                    R.id.nav_fruits->{
+                    R.id.nav_fruits -> {
                         return true
                     }
-                    R.id.nav_meat->{
+                    R.id.nav_meat -> {
                         return true
                     }
-                    R.id.nav_dairy->{
+                    R.id.nav_dairy -> {
                         return true
                     }
-                    R.id.nav_account->{
-                        startActivity(Intent(this@CategoriesActivity,AccountActivity::class.java))
+                    R.id.nav_account -> {
+                        startActivity(Intent(this@CategoriesActivity, AccountActivity::class.java))
                         finish()
                         return true
                     }
-                    R.id.nav_about->{
+                    R.id.nav_about -> {
                         return true
                     }
-                    R.id.nav_logout->{
+                    R.id.nav_logout -> {
                         auth.signOut()
-                        startActivity(Intent(this@CategoriesActivity,LoginActivity::class.java))
+                        startActivity(Intent(this@CategoriesActivity, LoginActivity::class.java))
                         finish()
                         return true
                     }
@@ -150,43 +149,43 @@ class CategoriesActivity : AppCompatActivity() {
 
     }
 
-    private fun clickListeners(){
+    private fun clickListeners() {
         imageViewSearch.setOnClickListener {
-            layoutSearch.visibility=View.VISIBLE
-            layoutList.visibility=View.GONE
-            layoutCart.visibility=View.GONE
-            recyclerViewSearch.visibility=View.GONE
-            floatingActionButtonCancelSearch.visibility=View.GONE
+            layoutSearch.visibility = View.VISIBLE
+            layoutList.visibility = View.GONE
+            layoutCart.visibility = View.GONE
+            recyclerViewSearch.visibility = View.GONE
+            floatingActionButtonCancelSearch.visibility = View.GONE
         }
 
         imageViewList.setOnClickListener {
-            layoutSearch.visibility=View.GONE
-            layoutList.visibility=View.VISIBLE
-            layoutCart.visibility=View.GONE
+            layoutSearch.visibility = View.GONE
+            layoutList.visibility = View.VISIBLE
+            layoutCart.visibility = View.GONE
         }
 
         imageViewBasket.setOnClickListener {
-            layoutSearch.visibility=View.GONE
-            layoutList.visibility=View.GONE
-            layoutCart.visibility=View.VISIBLE
+            layoutSearch.visibility = View.GONE
+            layoutList.visibility = View.GONE
+            layoutCart.visibility = View.VISIBLE
         }
 
         floatingActionButtonCancelCart.setOnClickListener {
-            layoutSearch.visibility=View.GONE
-            layoutList.visibility=View.GONE
-            layoutCart.visibility=View.GONE
+            layoutSearch.visibility = View.GONE
+            layoutList.visibility = View.GONE
+            layoutCart.visibility = View.GONE
         }
 
         floatingActionButtonCancelList.setOnClickListener {
-            layoutSearch.visibility=View.GONE
-            layoutList.visibility=View.GONE
-            layoutCart.visibility=View.GONE
+            layoutSearch.visibility = View.GONE
+            layoutList.visibility = View.GONE
+            layoutCart.visibility = View.GONE
         }
 
         floatingActionButtonCancelSearch.setOnClickListener {
-            layoutSearch.visibility=View.GONE
-            layoutList.visibility=View.GONE
-            layoutCart.visibility=View.GONE
+            layoutSearch.visibility = View.GONE
+            layoutList.visibility = View.GONE
+            layoutCart.visibility = View.GONE
         }
     }
 
