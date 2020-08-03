@@ -26,6 +26,7 @@ import com.google.firebase.ktx.Firebase
 import com.ngangavictor.grocerystore.R
 import com.ngangavictor.grocerystore.categories.account.AccountActivity
 import com.ngangavictor.grocerystore.login.LoginActivity
+import com.ngangavictor.grocerystore.utils.LocalStoragePrefs
 
 class CategoriesActivity : AppCompatActivity() {
 
@@ -54,6 +55,8 @@ class CategoriesActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var database: FirebaseDatabase
 
+    private lateinit var localStoragePrefs: LocalStoragePrefs
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_categories)
@@ -76,6 +79,8 @@ class CategoriesActivity : AppCompatActivity() {
 
         auth = Firebase.auth
         database = Firebase.database
+
+        localStoragePrefs = LocalStoragePrefs(this)
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
@@ -135,6 +140,7 @@ class CategoriesActivity : AppCompatActivity() {
                         return true
                     }
                     R.id.nav_logout -> {
+                        localStoragePrefs.clearAccDetailsPref()
                         auth.signOut()
                         startActivity(Intent(this@CategoriesActivity, LoginActivity::class.java))
                         finish()

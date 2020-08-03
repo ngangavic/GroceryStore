@@ -21,6 +21,7 @@ import com.ngangavictor.grocerystore.categories.CategoriesActivity
 import com.ngangavictor.grocerystore.categories.account.AccountActivity
 import com.ngangavictor.grocerystore.login.LoginActivity
 import com.ngangavictor.grocerystore.reset.ResetPasswordActivity
+import com.ngangavictor.grocerystore.utils.LocalStoragePrefs
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -36,6 +37,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var alert: AlertDialog
 
+    private lateinit var localStoragePrefs: LocalStoragePrefs
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.RegisterTheme)
         super.onCreate(savedInstanceState)
@@ -49,6 +52,8 @@ class MainActivity : AppCompatActivity() {
 
         auth = Firebase.auth
         database = Firebase.database
+
+        localStoragePrefs = LocalStoragePrefs(this)
 
         textViewLogin.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
@@ -146,6 +151,8 @@ class MainActivity : AppCompatActivity() {
 
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.child("name").exists() && snapshot.child("phone").exists()) {
+                        localStoragePrefs.saveAccDetailsPref("name",snapshot.child("name").value.toString())
+                        localStoragePrefs.saveAccDetailsPref("phone",snapshot.child("phone").value.toString())
                         startActivity(Intent(this@MainActivity, CategoriesActivity::class.java))
                         finish()
                     } else {
@@ -160,7 +167,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-
         if (auth.currentUser != null) {
             loadingAlert()
             if (auth.currentUser!!.isEmailVerified) {
