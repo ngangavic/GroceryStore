@@ -114,6 +114,11 @@ class CategoriesActivity : AppCompatActivity() {
         }
 
         clickListeners()
+        val headerView = navView.getHeaderView(0)
+        headerView.findViewById<TextView>(R.id.sidebar_name).text =
+            localStoragePrefs.getAccDetailsPref("name")
+        headerView.findViewById<TextView>(R.id.textViewEmail).text =
+            auth.currentUser!!.email.toString()
 
         navView.setNavigationItemSelectedListener(object :
             NavigationView.OnNavigationItemSelectedListener {
