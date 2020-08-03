@@ -18,15 +18,23 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import com.ngangavictor.grocerystore.R
 import com.ngangavictor.grocerystore.categories.account.AccountActivity
 import com.ngangavictor.grocerystore.login.LoginActivity
+import com.ngangavictor.grocerystore.utils.CircleImageView
 import com.ngangavictor.grocerystore.utils.LocalStoragePrefs
+import com.squareup.picasso.Picasso
 
 class CategoriesActivity : AppCompatActivity() {
 
@@ -54,6 +62,7 @@ class CategoriesActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var database: FirebaseDatabase
+    private lateinit var storageRef: FirebaseStorage
 
     private lateinit var localStoragePrefs: LocalStoragePrefs
 
@@ -79,6 +88,7 @@ class CategoriesActivity : AppCompatActivity() {
 
         auth = Firebase.auth
         database = Firebase.database
+        storageRef = Firebase.storage
 
         localStoragePrefs = LocalStoragePrefs(this)
 
@@ -114,6 +124,7 @@ class CategoriesActivity : AppCompatActivity() {
         }
 
         clickListeners()
+
         val headerView = navView.getHeaderView(0)
         headerView.findViewById<TextView>(R.id.sidebar_name).text =
             localStoragePrefs.getAccDetailsPref("name")
@@ -158,9 +169,17 @@ class CategoriesActivity : AppCompatActivity() {
 
         })
 
+        setProfileImage()
+
     }
 
     private fun clickListeners() {
+
+        imageViewProfile.setOnClickListener {
+            startActivity(Intent(this@CategoriesActivity,AccountActivity::class.java))
+            finish()
+        }
+
         imageViewSearch.setOnClickListener {
             layoutSearch.visibility = View.VISIBLE
             layoutList.visibility = View.GONE
@@ -198,6 +217,33 @@ class CategoriesActivity : AppCompatActivity() {
             layoutList.visibility = View.GONE
             layoutCart.visibility = View.GONE
         }
+    }
+
+    private fun setProfileImage() {
+        database.getReference("green-orchard").child("users")
+            .child(auth.currentUser!!.uid)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+
+                    Snackbar.make(
+                        findViewById(android.R.id.content),
+                        "Error:" + error.message,
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+
+                    if (snapshot.child("profileImage").exists()) {
+                        Picasso.get().load(snapshot.child("profileImage").value.toString())
+                            .transform(CircleImageView())
+                            .placeholder(R.drawable.loading)
+                            .into(imageViewProfile)
+                    }
+
+                }
+
+            })
     }
 
     override fun onSupportNavigateUp(): Boolean {
