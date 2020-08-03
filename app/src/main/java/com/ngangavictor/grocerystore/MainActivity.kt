@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var alert: AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.RegisterTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
