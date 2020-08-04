@@ -23,7 +23,6 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.ngangavictor.grocerystore.R
 import com.ngangavictor.grocerystore.categories.CategoriesActivity
-import com.ngangavictor.grocerystore.utils.CircleImageView
 import com.squareup.picasso.Picasso
 import java.io.ByteArrayOutputStream
 import java.util.*
@@ -61,6 +60,15 @@ class ProductActivity : AppCompatActivity() {
         spinnerCategory = findViewById(R.id.spinnerCategory)
         buttonAdd = findViewById(R.id.buttonAdd)
 
+        ArrayAdapter.createFromResource(
+            this@ProductActivity,
+            R.array.product_categories,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinnerCategory.adapter = adapter
+        }
+
         auth = Firebase.auth
         database = Firebase.database
         storageRef = Firebase.storage
@@ -92,6 +100,7 @@ class ProductActivity : AppCompatActivity() {
         val prodQuantity = quantity.text.toString()
         val prodDesc = productDescription.text.toString()
         val prodPrice = price.text.toString()
+        val prodCategory = spinnerCategory.selectedItem.toString()
 
         if (TextUtils.isEmpty(prodName)) {
             productName.requestFocus()
@@ -105,6 +114,14 @@ class ProductActivity : AppCompatActivity() {
         } else if (TextUtils.isEmpty(prodPrice)) {
             price.requestFocus()
             price.error = "Cannot be empty"
+        } else if (prodCategory == "Select Category") {
+            spinnerCategory.performClick()
+            Snackbar.make(
+                findViewById(android.R.id.content),
+                "Select category",
+                Snackbar.LENGTH_LONG
+            )
+                .show()
         } else {
 
             if (imagePath == "empty") {
@@ -142,7 +159,8 @@ class ProductActivity : AppCompatActivity() {
                                         prodQuantity,
                                         prodDesc,
                                         prodPrice,
-                                        downloadUri.toString()
+                                        downloadUri.toString(),
+                                        prodCategory
                                     )
                                 )
                                 .addOnSuccessListener {
@@ -181,12 +199,13 @@ class ProductActivity : AppCompatActivity() {
 
     }
 
-    private fun reset(){
+    private fun reset() {
         productName.text.clear()
         quantity.text.clear()
         productDescription.text.clear()
         price.text.clear()
         imageViewProductPhoto.setImageResource(R.drawable.ic_add_photo)
+        spinnerCategory.setSelection(0)
     }
 
     private fun getBitmap(): Bitmap {
@@ -233,5 +252,6 @@ class Product(
     var quantity: String,
     var desc: String,
     var price: String,
-    var image: String
+    var image: String,
+    var category:String
 )
