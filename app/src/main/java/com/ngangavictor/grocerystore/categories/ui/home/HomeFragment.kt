@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -20,10 +19,14 @@ class HomeFragment : Fragment() {
 
     private lateinit var categoryAdapter: CategoryAdapter
 
-    private lateinit var categoryList: MutableList<CategoryModel>
+    private lateinit var fruitCategoryList: MutableList<CategoryModel>
+    private lateinit var meatCategoryList: MutableList<CategoryModel>
+    private lateinit var dairyCategoryList: MutableList<CategoryModel>
 
-    private lateinit var recyclerViewFruits:RecyclerView
-    private lateinit var root:View
+    private lateinit var recyclerViewFruits: RecyclerView
+    private lateinit var recyclerViewMeat: RecyclerView
+    private lateinit var recyclerViewDairy: RecyclerView
+    private lateinit var root: View
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,15 +37,60 @@ class HomeFragment : Fragment() {
             ViewModelProviders.of(this).get(HomeViewModel::class.java)
         root = inflater.inflate(R.layout.fragment_home, container, false)
 
-        categoryList = ArrayList()
-        recyclerViewFruits=root.findViewById(R.id.recyclerViewFruits)
-        recyclerViewFruits.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL, false)
+        recyclerViewFruits = root.findViewById(R.id.recyclerViewFruits)
+        recyclerViewMeat = root.findViewById(R.id.recyclerViewMeat)
+        recyclerViewDairy = root.findViewById(R.id.recyclerViewDairy)
+
+        recyclerViewFruits.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         recyclerViewFruits.setHasFixedSize(true)
-        homeViewModel.getProducts().observe(viewLifecycleOwner, Observer { it->
-            categoryList = it as MutableList<CategoryModel>
+
+        recyclerViewMeat.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        recyclerViewMeat.setHasFixedSize(true)
+
+        recyclerViewDairy.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        recyclerViewDairy.setHasFixedSize(true)
+
+        fruitCategoryList = ArrayList()
+        meatCategoryList = ArrayList()
+        dairyCategoryList = ArrayList()
+
+        homeViewModel.getDairyCategory().observe(viewLifecycleOwner, Observer { it ->
+
+            dairyCategoryList = it as MutableList<CategoryModel>
 
             categoryAdapter = CategoryAdapter(
-                categoryList as ArrayList<CategoryModel>
+                dairyCategoryList as ArrayList<CategoryModel>
+            )
+
+            categoryAdapter.notifyDataSetChanged()
+
+            recyclerViewDairy.adapter = categoryAdapter
+
+        })
+
+        homeViewModel.getMeatCategory().observe(viewLifecycleOwner, Observer { it ->
+
+            meatCategoryList = it as MutableList<CategoryModel>
+
+            categoryAdapter = CategoryAdapter(
+                meatCategoryList as ArrayList<CategoryModel>
+            )
+
+            categoryAdapter.notifyDataSetChanged()
+
+            recyclerViewMeat.adapter = categoryAdapter
+
+        })
+
+        homeViewModel.getFruitCategory().observe(viewLifecycleOwner, Observer { it ->
+
+            fruitCategoryList = it as MutableList<CategoryModel>
+
+            categoryAdapter = CategoryAdapter(
+                fruitCategoryList as ArrayList<CategoryModel>
             )
 
             categoryAdapter.notifyDataSetChanged()
