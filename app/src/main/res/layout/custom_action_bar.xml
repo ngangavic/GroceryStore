@@ -23,6 +23,7 @@
         android:layout_weight="1"
         android:fontFamily="@font/amiri"
         android:text="TextView"
+        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/imageViewNotifications"
         app:layout_constraintStart_toEndOf="@+id/imageViewOpenDrawer"
         app:layout_constraintTop_toTopOf="parent" />

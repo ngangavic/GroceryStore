@@ -1,5 +1,6 @@
 package com.ngangavictor.grocerystore.categories
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
@@ -66,6 +67,7 @@ class CategoriesActivity : AppCompatActivity() {
 
     private lateinit var localStoragePrefs: LocalStoragePrefs
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_categories)
@@ -114,6 +116,8 @@ class CategoriesActivity : AppCompatActivity() {
         imageViewOpenDrawer = view.findViewById(R.id.imageViewOpenDrawer)
         imageViewNotifications = view.findViewById(R.id.imageViewNotifications)
         imageViewProfile = view.findViewById(R.id.imageViewProfile)
+
+        textViewTitle.text="All Categories"
 
         imageViewOpenDrawer.setOnClickListener {
             if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
