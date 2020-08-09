@@ -154,11 +154,9 @@ class MainActivity : AppCompatActivity() {
                         localStoragePrefs.saveAccDetailsPref("name",snapshot.child("name").value.toString())
                         localStoragePrefs.saveAccDetailsPref("phone",snapshot.child("phone").value.toString())
                         startActivity(Intent(this@MainActivity, CategoriesActivity::class.java))
-                        alert.dismiss()
                         finish()
                     } else {
                         startActivity(Intent(this@MainActivity, AccountActivity::class.java))
-                        alert.dismiss()
                         finish()
                     }
 
@@ -194,6 +192,10 @@ class MainActivity : AppCompatActivity() {
         alert.show()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        alert.dismiss()
+    }
 }
 
 class RegUser(var email: String, var date: String)
