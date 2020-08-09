@@ -33,6 +33,8 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.ngangavictor.grocerystore.R
 import com.ngangavictor.grocerystore.categories.account.AccountActivity
+import com.ngangavictor.grocerystore.categories.ui.category.CategoryFragment
+import com.ngangavictor.grocerystore.categories.ui.home.HomeFragment
 import com.ngangavictor.grocerystore.login.LoginActivity
 import com.ngangavictor.grocerystore.utils.CircleImageView
 import com.ngangavictor.grocerystore.utils.LocalStoragePrefs
@@ -100,16 +102,6 @@ class CategoriesActivity : AppCompatActivity() {
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
-        val navController = findNavController(R.id.nav_host_fragment)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.nav_home
-            ), drawerLayout
-        )
-//        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
 
         supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         supportActionBar?.setDisplayShowCustomEnabled(true)
@@ -144,15 +136,39 @@ class CategoriesActivity : AppCompatActivity() {
             override fun onNavigationItemSelected(item: MenuItem): Boolean {
                 when (item.itemId) {
                     R.id.nav_home -> {
+                        val homeFragment= HomeFragment()
+                        val fragmentTransaction = supportFragmentManager.beginTransaction()
+                        fragmentTransaction.replace(R.id.nav_host_fragment, homeFragment)
+                        fragmentTransaction.commit()
+                        textViewTitle.text="All Categories"
+                        drawerLayout.closeDrawer(GravityCompat.START)
                         return true
                     }
                     R.id.nav_fruits -> {
+                        val categoryFragment= CategoryFragment.newInstance("Fruits")
+                        val fragmentTransaction = supportFragmentManager.beginTransaction()
+                        fragmentTransaction.replace(R.id.nav_host_fragment, categoryFragment)
+                        fragmentTransaction.commit()
+                        drawerLayout.closeDrawer(GravityCompat.START)
+                        textViewTitle.text="Fruits"
                         return true
                     }
                     R.id.nav_meat -> {
+                        val categoryFragment= CategoryFragment.newInstance("Meat")
+                        val fragmentTransaction = supportFragmentManager.beginTransaction()
+                        fragmentTransaction.replace(R.id.nav_host_fragment, categoryFragment)
+                        fragmentTransaction.commit()
+                        textViewTitle.text="Meat"
+                        drawerLayout.closeDrawer(GravityCompat.START)
                         return true
                     }
                     R.id.nav_dairy -> {
+                        val categoryFragment= CategoryFragment.newInstance("Dairy")
+                        val fragmentTransaction = supportFragmentManager.beginTransaction()
+                        fragmentTransaction.replace(R.id.nav_host_fragment, categoryFragment)
+                        fragmentTransaction.commit()
+                        textViewTitle.text="Dairy"
+                        drawerLayout.closeDrawer(GravityCompat.START)
                         return true
                     }
                     R.id.nav_account -> {

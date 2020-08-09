@@ -46,8 +46,8 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        homeViewModel =
-            ViewModelProviders.of(this).get(HomeViewModel::class.java)
+        homeViewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
+
         root = inflater.inflate(R.layout.fragment_home, container, false)
 
         recyclerViewFruits = root.findViewById(R.id.recyclerViewFruits)
@@ -178,4 +178,14 @@ class HomeFragment : Fragment() {
 
         return root
     }
+
+    companion object {
+        @JvmStatic
+        fun newInstance() = CategoryFragment().apply {
+                arguments = Bundle().apply {
+
+                }
+            }
+    }
+
 }
