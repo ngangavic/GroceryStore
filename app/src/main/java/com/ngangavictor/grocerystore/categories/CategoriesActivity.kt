@@ -3,14 +3,17 @@ package com.ngangavictor.grocerystore.categories
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
@@ -31,20 +34,25 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.ngangavictor.grocerystore.R
+import com.ngangavictor.grocerystore.adpters.SearchAdapter
 import com.ngangavictor.grocerystore.categories.account.AccountActivity
 import com.ngangavictor.grocerystore.categories.ui.category.CategoryFragment
 import com.ngangavictor.grocerystore.categories.ui.home.HomeFragment
 import com.ngangavictor.grocerystore.login.LoginActivity
+import com.ngangavictor.grocerystore.models.CategoryModel
 import com.ngangavictor.grocerystore.utils.CircleImageView
 import com.ngangavictor.grocerystore.utils.LocalStoragePrefs
 import com.squareup.picasso.Callback
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
+import java.util.*
 
 class CategoriesActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+
     private lateinit var textViewTitle: TextView
+
     private lateinit var imageViewOpenDrawer: ImageView
     private lateinit var imageViewNotifications: ImageView
     private lateinit var imageViewProfile: ImageView
@@ -57,11 +65,14 @@ class CategoriesActivity : AppCompatActivity() {
     private lateinit var layoutList: ConstraintLayout
     private lateinit var layoutCart: ConstraintLayout
 
+    private lateinit var bottomRootLayout: LinearLayout
+
     private lateinit var floatingActionButtonCancelCart: FloatingActionButton
     private lateinit var floatingActionButtonCancelList: FloatingActionButton
     private lateinit var floatingActionButtonCancelSearch: FloatingActionButton
 
-    private lateinit var recyclerViewSearch: RecyclerView
+    private lateinit var gridViewSearch: GridView
+
     private lateinit var recyclerViewList: RecyclerView
     private lateinit var recyclerViewCart: RecyclerView
 
@@ -70,6 +81,12 @@ class CategoriesActivity : AppCompatActivity() {
     private lateinit var storageRef: FirebaseStorage
 
     private lateinit var localStoragePrefs: LocalStoragePrefs
+
+    private lateinit var editTextTextSearch: EditText
+
+    private lateinit var searchList: MutableList<CategoryModel>
+
+    private lateinit var searchAdapter: SearchAdapter
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,11 +101,13 @@ class CategoriesActivity : AppCompatActivity() {
         layoutList = findViewById(R.id.layoutList)
         layoutCart = findViewById(R.id.layoutCart)
 
+        bottomRootLayout = findViewById(R.id.bottomRootLayout)
+
         floatingActionButtonCancelCart = findViewById(R.id.floatingActionButtonCancelCart)
         floatingActionButtonCancelList = findViewById(R.id.floatingActionButtonCancelList)
         floatingActionButtonCancelSearch = findViewById(R.id.floatingActionButtonCancelSearch)
 
-        recyclerViewSearch = findViewById(R.id.recyclerViewSearch)
+        gridViewSearch = findViewById(R.id.gridViewSearch)
         recyclerViewList = findViewById(R.id.recyclerViewList)
         recyclerViewCart = findViewById(R.id.recyclerViewCart)
 
@@ -97,6 +116,10 @@ class CategoriesActivity : AppCompatActivity() {
         storageRef = Firebase.storage
 
         localStoragePrefs = LocalStoragePrefs(this)
+
+        editTextTextSearch = findViewById(R.id.editTextTextSearch)
+
+        searchList = ArrayList()
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
@@ -195,6 +218,68 @@ class CategoriesActivity : AppCompatActivity() {
 
     }
 
+    private fun search() {
+        editTextTextSearch.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (count==0){
+                    searchList.clear()
+                    floatingActionButtonCancelSearch.visibility=View.GONE
+                    searchAdapter.notifyDataSetChanged()
+                }else {
+                    searchProducts(s.toString())
+                }
+            }
+
+        })
+    }
+
+    private fun searchProducts(name: String) {
+        val fetchProductQuery = database.getReference("green-orchard").child("products")
+        fetchProductQuery.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                searchList.clear()
+
+                for (postSnapshot in p0.children) {
+                    Log.e("DATA", postSnapshot.value.toString())
+
+                    if (postSnapshot.value.toString().contains(name)) {
+                        Log.e("VALUE", postSnapshot.value.toString())
+                        searchList.add(
+                            CategoryModel(
+                                postSnapshot.child("image").value.toString(),
+                                postSnapshot.child("name").value.toString(),
+                                postSnapshot.child("desc").value.toString(),
+                                postSnapshot.child("price").value.toString(),
+                                postSnapshot.child("quantity").value.toString(),
+                                postSnapshot.key.toString(),
+                                postSnapshot.child("category").value.toString()
+                            )
+                        )
+                    }
+                }
+                searchAdapter =
+                    SearchAdapter(this@CategoriesActivity, searchList as ArrayList<CategoryModel>)
+                searchAdapter.notifyDataSetChanged()
+                gridViewSearch.adapter = searchAdapter
+                gridViewSearch.visibility = View.VISIBLE
+                floatingActionButtonCancelSearch.visibility = View.VISIBLE
+            }
+
+        })
+    }
+
     private fun clickListeners() {
 
         imageViewProfile.setOnClickListener {
@@ -203,20 +288,81 @@ class CategoriesActivity : AppCompatActivity() {
         }
 
         imageViewSearch.setOnClickListener {
+
+            DrawableCompat.setTint(
+                imageViewSearch.drawable, ContextCompat.getColor(
+                    applicationContext, R.color.colorWhite
+                )
+            )
+
+            DrawableCompat.setTint(
+                imageViewList.drawable, ContextCompat.getColor(
+                    applicationContext, R.color.colorPrimaryDark
+                )
+            )
+
+            DrawableCompat.setTint(
+                imageViewBasket.drawable, ContextCompat.getColor(
+                    applicationContext, R.color.colorPrimaryDark
+                )
+            )
+
             layoutSearch.visibility = View.VISIBLE
             layoutList.visibility = View.GONE
             layoutCart.visibility = View.GONE
-            recyclerViewSearch.visibility = View.GONE
+            gridViewSearch.visibility = View.GONE
             floatingActionButtonCancelSearch.visibility = View.GONE
+            bottomRootLayout.setBackgroundColor(resources.getColor(R.color.colorWhite))
+            val textView5 = findViewById<TextView>(R.id.textView5)
+            textView5.setTextColor(resources.getColor(R.color.colorBlack))
+            search()
         }
 
         imageViewList.setOnClickListener {
+
+            DrawableCompat.setTint(
+                imageViewSearch.drawable, ContextCompat.getColor(
+                    applicationContext, R.color.colorPrimaryDark
+                )
+            )
+
+            DrawableCompat.setTint(
+                imageViewList.drawable, ContextCompat.getColor(
+                    applicationContext, R.color.colorWhite
+                )
+            )
+
+            DrawableCompat.setTint(
+                imageViewBasket.drawable, ContextCompat.getColor(
+                    applicationContext, R.color.colorPrimaryDark
+                )
+            )
+
             layoutSearch.visibility = View.GONE
             layoutList.visibility = View.VISIBLE
             layoutCart.visibility = View.GONE
         }
 
         imageViewBasket.setOnClickListener {
+
+            DrawableCompat.setTint(
+                imageViewSearch.drawable, ContextCompat.getColor(
+                    applicationContext, R.color.colorPrimaryDark
+                )
+            )
+
+            DrawableCompat.setTint(
+                imageViewList.drawable, ContextCompat.getColor(
+                    applicationContext, R.color.colorPrimaryDark
+                )
+            )
+
+            DrawableCompat.setTint(
+                imageViewBasket.drawable, ContextCompat.getColor(
+                    applicationContext, R.color.colorWhite
+                )
+            )
+
             layoutSearch.visibility = View.GONE
             layoutList.visibility = View.GONE
             layoutCart.visibility = View.VISIBLE
@@ -238,6 +384,7 @@ class CategoriesActivity : AppCompatActivity() {
             layoutSearch.visibility = View.GONE
             layoutList.visibility = View.GONE
             layoutCart.visibility = View.GONE
+            searchList.clear()
         }
     }
 
@@ -263,19 +410,20 @@ class CategoriesActivity : AppCompatActivity() {
                             .networkPolicy(
                                 NetworkPolicy.OFFLINE
                             ).into(imageViewProfile, object : Callback {
-                            override fun onSuccess() {
+                                override fun onSuccess() {
 
-                            }
+                                }
 
-                            override fun onError(e: Exception?) {
-                                Log.e("PICASSO:", e?.message.toString())
-                                Picasso.get().load(snapshot.child("profileImage").value.toString())
-                                    .transform(CircleImageView())
-                                    .placeholder(R.drawable.loading)
-                                    .into(imageViewProfile)
-                            }
+                                override fun onError(e: Exception?) {
+                                    Log.e("PICASSO:", e?.message.toString())
+                                    Picasso.get()
+                                        .load(snapshot.child("profileImage").value.toString())
+                                        .transform(CircleImageView())
+                                        .placeholder(R.drawable.loading)
+                                        .into(imageViewProfile)
+                                }
 
-                        })
+                            })
 
 
                     }
