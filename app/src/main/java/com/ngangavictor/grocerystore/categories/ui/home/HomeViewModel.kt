@@ -41,7 +41,8 @@ class HomeViewModel : ViewModel() {
                                 data.child("desc").value.toString(),
                                 data.child("price").value.toString(),
                                 data.child("quantity").value.toString(),
-                                data.key.toString()
+                                data.key.toString(),
+                                data.child("category").value.toString()
                             )
                         )
                     }
@@ -73,7 +74,8 @@ class HomeViewModel : ViewModel() {
                                 data.child("desc").value.toString(),
                                 data.child("price").value.toString(),
                                 data.child("quantity").value.toString(),
-                                data.key.toString()
+                                data.key.toString(),
+                                data.child("category").value.toString()
                             )
                         )
                     }
@@ -105,7 +107,8 @@ class HomeViewModel : ViewModel() {
                                 data.child("desc").value.toString(),
                                 data.child("price").value.toString(),
                                 data.child("quantity").value.toString(),
-                                data.key.toString()
+                                data.key.toString(),
+                                data.child("category").value.toString()
                             )
                         )
                     }

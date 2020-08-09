@@ -10,14 +10,15 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ngangavictor.grocerystore.R
-import com.ngangavictor.grocerystore.adpters.CategoryAdapter
+import com.ngangavictor.grocerystore.adpters.CategoriesAdapter
+import com.ngangavictor.grocerystore.categories.CategoriesActivity
 import com.ngangavictor.grocerystore.models.CategoryModel
 
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
 
-    private lateinit var categoryAdapter: CategoryAdapter
+    private lateinit var categoriesAdapter: CategoriesAdapter
 
     private lateinit var fruitCategoryList: MutableList<CategoryModel>
     private lateinit var meatCategoryList: MutableList<CategoryModel>
@@ -61,13 +62,14 @@ class HomeFragment : Fragment() {
 
             dairyCategoryList = it as MutableList<CategoryModel>
 
-            categoryAdapter = CategoryAdapter(
+            categoriesAdapter = CategoriesAdapter(
+                requireContext(),
                 dairyCategoryList as ArrayList<CategoryModel>
             )
 
-            categoryAdapter.notifyDataSetChanged()
+            categoriesAdapter.notifyDataSetChanged()
 
-            recyclerViewDairy.adapter = categoryAdapter
+            recyclerViewDairy.adapter = categoriesAdapter
 
         })
 
@@ -75,13 +77,14 @@ class HomeFragment : Fragment() {
 
             meatCategoryList = it as MutableList<CategoryModel>
 
-            categoryAdapter = CategoryAdapter(
+            categoriesAdapter = CategoriesAdapter(
+                requireContext(),
                 meatCategoryList as ArrayList<CategoryModel>
             )
 
-            categoryAdapter.notifyDataSetChanged()
+            categoriesAdapter.notifyDataSetChanged()
 
-            recyclerViewMeat.adapter = categoryAdapter
+            recyclerViewMeat.adapter = categoriesAdapter
 
         })
 
@@ -89,13 +92,14 @@ class HomeFragment : Fragment() {
 
             fruitCategoryList = it as MutableList<CategoryModel>
 
-            categoryAdapter = CategoryAdapter(
+            categoriesAdapter = CategoriesAdapter(
+                requireContext(),
                 fruitCategoryList as ArrayList<CategoryModel>
             )
 
-            categoryAdapter.notifyDataSetChanged()
+            categoriesAdapter.notifyDataSetChanged()
 
-            recyclerViewFruits.adapter = categoryAdapter
+            recyclerViewFruits.adapter = categoriesAdapter
 
         })
 
