@@ -3,6 +3,7 @@ package com.ngangavictor.grocerystore.categories
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
@@ -35,7 +36,10 @@ import com.ngangavictor.grocerystore.categories.account.AccountActivity
 import com.ngangavictor.grocerystore.login.LoginActivity
 import com.ngangavictor.grocerystore.utils.CircleImageView
 import com.ngangavictor.grocerystore.utils.LocalStoragePrefs
+import com.squareup.picasso.Callback
+import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
+import java.lang.Exception
 
 class CategoriesActivity : AppCompatActivity() {
 
@@ -239,10 +243,24 @@ class CategoriesActivity : AppCompatActivity() {
                 override fun onDataChange(snapshot: DataSnapshot) {
 
                     if (snapshot.child("profileImage").exists()) {
-                        Picasso.get().load(snapshot.child("profileImage").value.toString())
-                            .transform(CircleImageView())
-                            .placeholder(R.drawable.loading)
-                            .into(imageViewProfile)
+
+                        Picasso.get().load(snapshot.child("profileImage").value.toString()).transform(CircleImageView()).placeholder(R.drawable.loading).networkPolicy(
+                            NetworkPolicy.OFFLINE).into(imageViewProfile,object: Callback {
+                            override fun onSuccess() {
+
+                            }
+
+                            override fun onError(e: Exception?) {
+                                Log.e("PICASSO:",e?.message.toString())
+                                Picasso.get().load(snapshot.child("profileImage").value.toString())
+                                    .transform(CircleImageView())
+                                    .placeholder(R.drawable.loading)
+                                    .into(imageViewProfile)
+                            }
+
+                        })
+
+
                     }
 
                 }
