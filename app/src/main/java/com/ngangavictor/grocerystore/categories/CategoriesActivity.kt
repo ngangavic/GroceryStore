@@ -16,7 +16,6 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
@@ -41,7 +40,6 @@ import com.ngangavictor.grocerystore.utils.LocalStoragePrefs
 import com.squareup.picasso.Callback
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
-import java.lang.Exception
 
 class CategoriesActivity : AppCompatActivity() {
 
@@ -113,7 +111,7 @@ class CategoriesActivity : AppCompatActivity() {
         imageViewNotifications = view.findViewById(R.id.imageViewNotifications)
         imageViewProfile = view.findViewById(R.id.imageViewProfile)
 
-        textViewTitle.text="All Categories"
+        textViewTitle.text = "All Categories"
 
         imageViewOpenDrawer.setOnClickListener {
             if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -136,38 +134,38 @@ class CategoriesActivity : AppCompatActivity() {
             override fun onNavigationItemSelected(item: MenuItem): Boolean {
                 when (item.itemId) {
                     R.id.nav_home -> {
-                        val homeFragment= HomeFragment()
+                        val homeFragment = HomeFragment()
                         val fragmentTransaction = supportFragmentManager.beginTransaction()
                         fragmentTransaction.replace(R.id.nav_host_fragment, homeFragment)
                         fragmentTransaction.commit()
-                        textViewTitle.text="All Categories"
+                        textViewTitle.text = "All Categories"
                         drawerLayout.closeDrawer(GravityCompat.START)
                         return true
                     }
                     R.id.nav_fruits -> {
-                        val categoryFragment= CategoryFragment.newInstance("Fruits")
+                        val categoryFragment = CategoryFragment.newInstance("Fruits")
                         val fragmentTransaction = supportFragmentManager.beginTransaction()
                         fragmentTransaction.replace(R.id.nav_host_fragment, categoryFragment)
                         fragmentTransaction.commit()
                         drawerLayout.closeDrawer(GravityCompat.START)
-                        textViewTitle.text="Fruits"
+                        textViewTitle.text = "Fruits"
                         return true
                     }
                     R.id.nav_meat -> {
-                        val categoryFragment= CategoryFragment.newInstance("Meat")
+                        val categoryFragment = CategoryFragment.newInstance("Meat")
                         val fragmentTransaction = supportFragmentManager.beginTransaction()
                         fragmentTransaction.replace(R.id.nav_host_fragment, categoryFragment)
                         fragmentTransaction.commit()
-                        textViewTitle.text="Meat"
+                        textViewTitle.text = "Meat"
                         drawerLayout.closeDrawer(GravityCompat.START)
                         return true
                     }
                     R.id.nav_dairy -> {
-                        val categoryFragment= CategoryFragment.newInstance("Dairy")
+                        val categoryFragment = CategoryFragment.newInstance("Dairy")
                         val fragmentTransaction = supportFragmentManager.beginTransaction()
                         fragmentTransaction.replace(R.id.nav_host_fragment, categoryFragment)
                         fragmentTransaction.commit()
-                        textViewTitle.text="Dairy"
+                        textViewTitle.text = "Dairy"
                         drawerLayout.closeDrawer(GravityCompat.START)
                         return true
                     }
@@ -200,7 +198,7 @@ class CategoriesActivity : AppCompatActivity() {
     private fun clickListeners() {
 
         imageViewProfile.setOnClickListener {
-            startActivity(Intent(this@CategoriesActivity,AccountActivity::class.java))
+            startActivity(Intent(this@CategoriesActivity, AccountActivity::class.java))
             finish()
         }
 
@@ -260,14 +258,17 @@ class CategoriesActivity : AppCompatActivity() {
 
                     if (snapshot.child("profileImage").exists()) {
 
-                        Picasso.get().load(snapshot.child("profileImage").value.toString()).transform(CircleImageView()).placeholder(R.drawable.loading).networkPolicy(
-                            NetworkPolicy.OFFLINE).into(imageViewProfile,object: Callback {
+                        Picasso.get().load(snapshot.child("profileImage").value.toString())
+                            .transform(CircleImageView()).placeholder(R.drawable.loading)
+                            .networkPolicy(
+                                NetworkPolicy.OFFLINE
+                            ).into(imageViewProfile, object : Callback {
                             override fun onSuccess() {
 
                             }
 
                             override fun onError(e: Exception?) {
-                                Log.e("PICASSO:",e?.message.toString())
+                                Log.e("PICASSO:", e?.message.toString())
                                 Picasso.get().load(snapshot.child("profileImage").value.toString())
                                     .transform(CircleImageView())
                                     .placeholder(R.drawable.loading)

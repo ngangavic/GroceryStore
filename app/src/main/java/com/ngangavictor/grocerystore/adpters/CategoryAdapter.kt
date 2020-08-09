@@ -14,7 +14,6 @@ import com.ngangavictor.grocerystore.models.CategoryModel
 import com.squareup.picasso.Callback
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
-import java.lang.Exception
 
 class CategoryAdapter(val context: Context, private val productList: ArrayList<CategoryModel>) :
     BaseAdapter() {
@@ -29,14 +28,16 @@ class CategoryAdapter(val context: Context, private val productList: ArrayList<C
             itemView.findViewById<TextView>(R.id.textViewProductDescription)
         val textViewProductPrice = itemView.findViewById<TextView>(R.id.textViewProductPrice)
 
-        Picasso.get().load(productList[position].productImage).placeholder(R.drawable.loading).networkPolicy(
-            NetworkPolicy.OFFLINE).into(imageViewProduct,object: Callback {
+        Picasso.get().load(productList[position].productImage).placeholder(R.drawable.loading)
+            .networkPolicy(
+                NetworkPolicy.OFFLINE
+            ).into(imageViewProduct, object : Callback {
             override fun onSuccess() {
 
             }
 
             override fun onError(e: Exception?) {
-                Log.e("PICASSO:",e?.message.toString())
+                Log.e("PICASSO:", e?.message.toString())
                 Picasso.get().load(productList[position].productImage)
                     .placeholder(R.drawable.loading)
                     .into(imageViewProduct)

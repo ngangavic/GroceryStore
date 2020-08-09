@@ -253,5 +253,5 @@ class Product(
     var desc: String,
     var price: String,
     var image: String,
-    var category:String
+    var category: String
 )

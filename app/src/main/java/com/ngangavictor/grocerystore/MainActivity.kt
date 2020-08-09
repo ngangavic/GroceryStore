@@ -151,8 +151,14 @@ class MainActivity : AppCompatActivity() {
 
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.child("name").exists() && snapshot.child("phone").exists()) {
-                        localStoragePrefs.saveAccDetailsPref("name",snapshot.child("name").value.toString())
-                        localStoragePrefs.saveAccDetailsPref("phone",snapshot.child("phone").value.toString())
+                        localStoragePrefs.saveAccDetailsPref(
+                            "name",
+                            snapshot.child("name").value.toString()
+                        )
+                        localStoragePrefs.saveAccDetailsPref(
+                            "phone",
+                            snapshot.child("phone").value.toString()
+                        )
                         startActivity(Intent(this@MainActivity, CategoriesActivity::class.java))
                         finish()
                     } else {

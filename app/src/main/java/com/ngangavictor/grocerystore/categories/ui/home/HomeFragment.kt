@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ngangavictor.grocerystore.R
 import com.ngangavictor.grocerystore.adpters.CategoriesAdapter
-import com.ngangavictor.grocerystore.categories.CategoriesActivity
 import com.ngangavictor.grocerystore.categories.ui.category.CategoryFragment
 import com.ngangavictor.grocerystore.models.CategoryModel
 
@@ -33,12 +32,12 @@ class HomeFragment : Fragment() {
 
     private lateinit var root: View
 
-    private lateinit var textViewFruitsMore:TextView
-    private lateinit var textViewMeatMore:TextView
-    private lateinit var textViewDairyMore:TextView
-    private lateinit var textViewFruitsMessage:TextView
-    private lateinit var textViewDairyMessage:TextView
-    private lateinit var textViewMeatMessage:TextView
+    private lateinit var textViewFruitsMore: TextView
+    private lateinit var textViewMeatMore: TextView
+    private lateinit var textViewDairyMore: TextView
+    private lateinit var textViewFruitsMessage: TextView
+    private lateinit var textViewDairyMessage: TextView
+    private lateinit var textViewMeatMessage: TextView
 
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
@@ -54,9 +53,9 @@ class HomeFragment : Fragment() {
         recyclerViewMeat = root.findViewById(R.id.recyclerViewMeat)
         recyclerViewDairy = root.findViewById(R.id.recyclerViewDairy)
 
-        recyclerViewFruits.visibility=View.GONE
-        recyclerViewMeat.visibility=View.GONE
-        recyclerViewDairy.visibility=View.GONE
+        recyclerViewFruits.visibility = View.GONE
+        recyclerViewMeat.visibility = View.GONE
+        recyclerViewDairy.visibility = View.GONE
 
         textViewFruitsMore = root.findViewById(R.id.textViewFruitsMore)
         textViewMeatMore = root.findViewById(R.id.textViewMeatMore)
@@ -65,9 +64,9 @@ class HomeFragment : Fragment() {
         textViewDairyMessage = root.findViewById(R.id.textViewDairyMessage)
         textViewMeatMessage = root.findViewById(R.id.textViewMeatMessage)
 
-        textViewFruitsMessage.visibility=View.GONE
-        textViewDairyMessage.visibility=View.GONE
-        textViewMeatMessage.visibility=View.GONE
+        textViewFruitsMessage.visibility = View.GONE
+        textViewDairyMessage.visibility = View.GONE
+        textViewMeatMessage.visibility = View.GONE
 
         recyclerViewFruits.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -87,10 +86,10 @@ class HomeFragment : Fragment() {
 
         homeViewModel.getDairyCategory().observe(viewLifecycleOwner, Observer {
 
-            if (it.isEmpty()){
-                textViewDairyMessage.text="No Products"
-                textViewDairyMessage.visibility=View.VISIBLE
-            }else {
+            if (it.isEmpty()) {
+                textViewDairyMessage.text = "No Products"
+                textViewDairyMessage.visibility = View.VISIBLE
+            } else {
 
                 dairyCategoryList = it as MutableList<CategoryModel>
 
@@ -102,18 +101,18 @@ class HomeFragment : Fragment() {
                 categoriesAdapter.notifyDataSetChanged()
 
                 recyclerViewDairy.adapter = categoriesAdapter
-                recyclerViewDairy.visibility=View.VISIBLE
-                textViewDairyMessage.visibility=View.GONE
+                recyclerViewDairy.visibility = View.VISIBLE
+                textViewDairyMessage.visibility = View.GONE
             }
 
         })
 
         homeViewModel.getMeatCategory().observe(viewLifecycleOwner, Observer {
 
-            if (it.isEmpty()){
-                textViewMeatMessage.text="No Products"
-                textViewMeatMessage.visibility=View.VISIBLE
-            }else {
+            if (it.isEmpty()) {
+                textViewMeatMessage.text = "No Products"
+                textViewMeatMessage.visibility = View.VISIBLE
+            } else {
 
                 meatCategoryList = it as MutableList<CategoryModel>
 
@@ -125,8 +124,8 @@ class HomeFragment : Fragment() {
                 categoriesAdapter.notifyDataSetChanged()
 
                 recyclerViewMeat.adapter = categoriesAdapter
-                recyclerViewMeat.visibility=View.VISIBLE
-                textViewMeatMessage.visibility=View.GONE
+                recyclerViewMeat.visibility = View.VISIBLE
+                textViewMeatMessage.visibility = View.GONE
             }
 
         })
@@ -135,42 +134,42 @@ class HomeFragment : Fragment() {
 
             if (it.isEmpty()) {
                 textViewFruitsMessage.text = "No products"
-                textViewFruitsMessage.visibility=View.VISIBLE
-            }else{
+                textViewFruitsMessage.visibility = View.VISIBLE
+            } else {
 
-            fruitCategoryList = it as MutableList<CategoryModel>
+                fruitCategoryList = it as MutableList<CategoryModel>
 
-            categoriesAdapter = CategoriesAdapter(
-                requireContext(),
-                fruitCategoryList as ArrayList<CategoryModel>
-            )
+                categoriesAdapter = CategoriesAdapter(
+                    requireContext(),
+                    fruitCategoryList as ArrayList<CategoryModel>
+                )
 
-            categoriesAdapter.notifyDataSetChanged()
+                categoriesAdapter.notifyDataSetChanged()
 
-            recyclerViewFruits.adapter = categoriesAdapter
-                recyclerViewFruits.visibility=View.VISIBLE
-                textViewFruitsMessage.visibility=View.GONE
+                recyclerViewFruits.adapter = categoriesAdapter
+                recyclerViewFruits.visibility = View.VISIBLE
+                textViewFruitsMessage.visibility = View.GONE
 
-        }
+            }
 
         })
 
         textViewFruitsMore.setOnClickListener {
-            val categoryFragment= CategoryFragment.newInstance("Fruits")
+            val categoryFragment = CategoryFragment.newInstance("Fruits")
             val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
             fragmentTransaction.replace(R.id.nav_host_fragment, categoryFragment)
             fragmentTransaction.commit()
         }
 
         textViewMeatMore.setOnClickListener {
-            val categoryFragment= CategoryFragment.newInstance("Meat")
+            val categoryFragment = CategoryFragment.newInstance("Meat")
             val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
             fragmentTransaction.replace(R.id.nav_host_fragment, categoryFragment)
             fragmentTransaction.commit()
         }
 
         textViewDairyMore.setOnClickListener {
-            val categoryFragment= CategoryFragment.newInstance("Dairy")
+            val categoryFragment = CategoryFragment.newInstance("Dairy")
             val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
             fragmentTransaction.replace(R.id.nav_host_fragment, categoryFragment)
             fragmentTransaction.commit()
@@ -182,10 +181,10 @@ class HomeFragment : Fragment() {
     companion object {
         @JvmStatic
         fun newInstance() = CategoryFragment().apply {
-                arguments = Bundle().apply {
+            arguments = Bundle().apply {
 
-                }
             }
+        }
     }
 
 }

@@ -7,11 +7,11 @@ import com.google.firebase.ktx.Firebase
 
 class FirebaseRepository {
 
-     private val database: FirebaseDatabase=Firebase.database
+    private val database: FirebaseDatabase = Firebase.database
 
 
-    fun getProducts():DatabaseReference{
-      return database.getReference("green-orchard").child("products")
+    fun getProducts(): DatabaseReference {
+        return database.getReference("green-orchard").child("products")
     }
 
 }

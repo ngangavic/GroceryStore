@@ -6,10 +6,10 @@
     android:layout_marginStart="3dp"
     android:layout_marginTop="5dp"
     android:layout_marginBottom="5dp"
+    android:background="@color/colorWhite"
     app:cardBackgroundColor="@color/colorWhite"
     app:cardElevation="3dp"
-    app:contentPadding="3dp"
-    android:background="@color/colorWhite">
+    app:contentPadding="3dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="150dp"

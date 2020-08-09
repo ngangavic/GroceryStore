@@ -1,12 +1,10 @@
 package com.ngangavictor.grocerystore.adpters
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
 import com.ngangavictor.grocerystore.R
 import com.ngangavictor.grocerystore.categories.CategoriesActivity
@@ -16,9 +14,11 @@ import com.ngangavictor.grocerystore.models.CategoryModel
 import com.squareup.picasso.Callback
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
-import java.lang.Exception
 
-class CategoriesAdapter(private val context: Context,private val products: ArrayList<CategoryModel>) :
+class CategoriesAdapter(
+    private val context: Context,
+    private val products: ArrayList<CategoryModel>
+) :
     RecyclerView.Adapter<CategoryHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryHolder {
@@ -38,13 +38,14 @@ class CategoriesAdapter(private val context: Context,private val products: Array
         holder.textViewProductDescription.text = products[position].productDesc
         holder.textViewProductName.text = products[position].productName
         holder.textViewProductPrice.text = "KES." + products[position].productPrice
-        Picasso.get().load(products[position].productImage).placeholder(R.drawable.loading).networkPolicy(NetworkPolicy.OFFLINE).into(holder.imageViewProduct,object: Callback{
+        Picasso.get().load(products[position].productImage).placeholder(R.drawable.loading)
+            .networkPolicy(NetworkPolicy.OFFLINE).into(holder.imageViewProduct, object : Callback {
             override fun onSuccess() {
 
             }
 
             override fun onError(e: Exception?) {
-                Log.e("PICASSO:",e?.message.toString())
+                Log.e("PICASSO:", e?.message.toString())
                 Picasso.get().load(products[position].productImage)
                     .placeholder(R.drawable.loading)
                     .into(holder.imageViewProduct)
@@ -52,8 +53,8 @@ class CategoriesAdapter(private val context: Context,private val products: Array
 
         })
         holder.imageViewProduct.setOnClickListener {
-            val activity=context as CategoriesActivity
-           val categoryFragment=CategoryFragment.newInstance(products[position].category)
+            val activity = context as CategoriesActivity
+            val categoryFragment = CategoryFragment.newInstance(products[position].category)
             val fragmentTransaction = activity.supportFragmentManager.beginTransaction()
             fragmentTransaction.replace(R.id.nav_host_fragment, categoryFragment)
             fragmentTransaction.commit()

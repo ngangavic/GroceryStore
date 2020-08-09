@@ -10,7 +10,7 @@ import com.google.firebase.database.ValueEventListener
 import com.ngangavictor.grocerystore.models.CategoryModel
 import com.ngangavictor.grocerystore.repos.FirebaseRepository
 
-class CategoryViewModel(): ViewModel() {
+class CategoryViewModel() : ViewModel() {
 
     var firebaseRepository = FirebaseRepository()
 
@@ -18,7 +18,7 @@ class CategoryViewModel(): ViewModel() {
 
     var list: MutableList<CategoryModel> = mutableListOf()
 
-    fun getData(param:String): LiveData<List<CategoryModel>> {
+    fun getData(param: String): LiveData<List<CategoryModel>> {
         list.clear()
         firebaseRepository.getProducts().addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
@@ -38,7 +38,7 @@ class CategoryViewModel(): ViewModel() {
                                 data.child("price").value.toString(),
                                 data.child("quantity").value.toString(),
                                 data.key.toString(),
-                            data.child("category").value.toString()
+                                data.child("category").value.toString()
                             )
                         )
                     }

@@ -210,7 +210,8 @@ class AccountActivity : AppCompatActivity() {
                 getBitmap().compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream)
 
                 val data = byteArrayOutputStream.toByteArray()
-                val storage = storageRef.reference.child("green-orchard").child("profiles/" + auth.uid.toString())
+                val storage = storageRef.reference.child("green-orchard")
+                    .child("profiles/" + auth.uid.toString())
                 val uploadTask = storage.putBytes(data)
                 uploadTask.continueWithTask { p0 ->
                     if (!p0.isSuccessful) {
