@@ -15,11 +15,6 @@ import com.ngangavictor.grocerystore.adpters.CategoriesAdapter
 import com.ngangavictor.grocerystore.adpters.CategoryAdapter
 import com.ngangavictor.grocerystore.models.CategoryModel
 
-/**
- * A simple [Fragment] subclass.
- * Use the [CategoryFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class CategoryFragment : Fragment() {
 
     private lateinit var categoryViewModel: CategoryViewModel
@@ -29,6 +24,7 @@ class CategoryFragment : Fragment() {
     private lateinit var imageViewSort:ImageView
 
     private lateinit var textViewSort:TextView
+    private lateinit var textViewMessage:TextView
 
     private lateinit var gridViewCategory:GridView
 
@@ -41,24 +37,37 @@ class CategoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         categoryViewModel=ViewModelProviders.of(this).get(CategoryViewModel::class.java)
+
         root=inflater.inflate(R.layout.fragment_category, container, false)
+
         imageViewSort=root.findViewById(R.id.imageViewSort)
         textViewSort=root.findViewById(R.id.textViewSort)
+        textViewMessage=root.findViewById(R.id.textViewMessage)
         gridViewCategory=root.findViewById(R.id.gridViewCategory)
+
+        gridViewCategory.visibility=View.GONE
 
         categoryList = ArrayList()
 
-        categoryViewModel.getData(requireArguments().getString("category").toString()).observe(viewLifecycleOwner, Observer { it ->
+        categoryViewModel.getData(requireArguments().getString("category").toString()).observe(viewLifecycleOwner, Observer {
 
-            categoryList = it as MutableList<CategoryModel>
+            if (it.isEmpty()){
+                textViewMessage.text="No Products"
+            }else {
 
-            categoryAdapter = CategoryAdapter(requireContext(),
-                categoryList as ArrayList<CategoryModel>
-            )
+                categoryList = it as MutableList<CategoryModel>
 
-            categoryAdapter.notifyDataSetChanged()
+                categoryAdapter = CategoryAdapter(
+                    requireContext(),
+                    categoryList as ArrayList<CategoryModel>
+                )
 
-            gridViewCategory.adapter = categoryAdapter
+                categoryAdapter.notifyDataSetChanged()
+
+                gridViewCategory.adapter = categoryAdapter
+                textViewMessage.visibility=View.GONE
+                gridViewCategory.visibility=View.VISIBLE
+            }
 
         })
 
