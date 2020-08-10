@@ -6,12 +6,10 @@ import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.ngangavictor.grocerystore.R
 import com.ngangavictor.grocerystore.categories.CategoriesActivity
-import com.ngangavictor.grocerystore.categories.ui.cart.CartViewModel
 import com.ngangavictor.grocerystore.categories.ui.category.CategoryFragment
 import com.ngangavictor.grocerystore.holders.CategoryHolder
 import com.ngangavictor.grocerystore.models.Cart
@@ -19,10 +17,8 @@ import com.ngangavictor.grocerystore.models.CategoryModel
 import com.squareup.picasso.Callback
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
 
 class CategoriesAdapter(
     private val context: Context,

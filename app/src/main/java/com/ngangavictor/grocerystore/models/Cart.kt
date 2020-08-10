@@ -9,28 +9,28 @@ import androidx.room.PrimaryKey
 class Cart {
 
     @PrimaryKey(autoGenerate = false)
-   @ColumnInfo(name = "key")
-    var key:String
+    @ColumnInfo(name = "key")
+    var key: String
 
     @NonNull
     @ColumnInfo(name = "prodName")
-    var prodName:String
+    var prodName: String
 
     @NonNull
     @ColumnInfo(name = "prodDesc")
-    var prodDesc:String
+    var prodDesc: String
 
     @NonNull
     @ColumnInfo(name = "prodPrice")
-    var prodPrice:String
+    var prodPrice: String
 
     @NonNull
     @ColumnInfo(name = "prodQuantity")
-    var prodQuantity:Int
+    var prodQuantity: Int
 
     @NonNull
     @ColumnInfo(name = "prodImage")
-    var prodImage:String
+    var prodImage: String
 
     constructor(
         key: String,

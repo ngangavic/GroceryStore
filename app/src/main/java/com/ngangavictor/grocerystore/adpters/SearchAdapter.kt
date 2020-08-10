@@ -32,18 +32,18 @@ class SearchAdapter(val context: Context, private val productList: ArrayList<Cat
             .networkPolicy(
                 NetworkPolicy.OFFLINE
             ).into(imageViewProduct, object : Callback {
-            override fun onSuccess() {
+                override fun onSuccess() {
 
-            }
+                }
 
-            override fun onError(e: Exception?) {
-                Log.e("PICASSO:", e?.message.toString())
-                Picasso.get().load(productList[position].productImage)
-                    .placeholder(R.drawable.loading)
-                    .into(imageViewProduct)
-            }
+                override fun onError(e: Exception?) {
+                    Log.e("PICASSO:", e?.message.toString())
+                    Picasso.get().load(productList[position].productImage)
+                        .placeholder(R.drawable.loading)
+                        .into(imageViewProduct)
+                }
 
-        })
+            })
 
         textViewProductName.text = productList[position].productName
         textViewProductDescription.text = productList[position].productDesc

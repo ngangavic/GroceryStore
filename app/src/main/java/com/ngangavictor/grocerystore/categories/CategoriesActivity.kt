@@ -118,8 +118,8 @@ class CategoriesActivity : AppCompatActivity() {
         storageRef = Firebase.storage
 
         localStoragePrefs = LocalStoragePrefs(this)
-        
-        cartViewModel=ViewModelProvider(this).get(CartViewModel::class.java)
+
+        cartViewModel = ViewModelProvider(this).get(CartViewModel::class.java)
 
         editTextTextSearch = findViewById(R.id.editTextTextSearch)
 
@@ -233,11 +233,11 @@ class CategoriesActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (count==0){
+                if (count == 0) {
                     searchList.clear()
-                    floatingActionButtonCancelSearch.visibility=View.GONE
+                    floatingActionButtonCancelSearch.visibility = View.GONE
                     searchAdapter.notifyDataSetChanged()
-                }else {
+                } else {
                     searchProducts(s.toString())
                 }
             }
@@ -441,9 +441,9 @@ class CategoriesActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
-    
-    companion object{
+
+    companion object {
         lateinit var cartViewModel: CartViewModel
     }
-    
+
 }
