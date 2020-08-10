@@ -15,6 +15,7 @@ import com.ngangavictor.grocerystore.R
 import com.ngangavictor.grocerystore.adpters.CategoriesAdapter
 import com.ngangavictor.grocerystore.categories.ui.category.CategoryFragment
 import com.ngangavictor.grocerystore.models.CategoryModel
+import kotlin.coroutines.coroutineContext
 
 class HomeFragment : Fragment() {
 
@@ -95,8 +96,7 @@ class HomeFragment : Fragment() {
 
                 categoriesAdapter = CategoriesAdapter(
                     requireContext(),
-                    dairyCategoryList as ArrayList<CategoryModel>
-                )
+                    dairyCategoryList as ArrayList<CategoryModel>)
 
                 categoriesAdapter.notifyDataSetChanged()
 

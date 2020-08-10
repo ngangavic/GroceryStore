@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -36,6 +37,7 @@ import com.google.firebase.storage.ktx.storage
 import com.ngangavictor.grocerystore.R
 import com.ngangavictor.grocerystore.adpters.SearchAdapter
 import com.ngangavictor.grocerystore.categories.account.AccountActivity
+import com.ngangavictor.grocerystore.categories.ui.cart.CartViewModel
 import com.ngangavictor.grocerystore.categories.ui.category.CategoryFragment
 import com.ngangavictor.grocerystore.categories.ui.home.HomeFragment
 import com.ngangavictor.grocerystore.login.LoginActivity
@@ -116,6 +118,8 @@ class CategoriesActivity : AppCompatActivity() {
         storageRef = Firebase.storage
 
         localStoragePrefs = LocalStoragePrefs(this)
+        
+        cartViewModel=ViewModelProvider(this).get(CartViewModel::class.java)
 
         editTextTextSearch = findViewById(R.id.editTextTextSearch)
 
@@ -437,4 +441,9 @@ class CategoriesActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
+    
+    companion object{
+        lateinit var cartViewModel: CartViewModel
+    }
+    
 }

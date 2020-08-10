@@ -1,6 +1,7 @@
 package com.ngangavictor.grocerystore.holders
 
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -14,5 +15,6 @@ class CategoryHolder(itemView: View) :
     val textViewProductDescription: TextView =
         itemView.findViewById(R.id.textViewProductDescription)
     val textViewProductPrice: TextView = itemView.findViewById(R.id.textViewProductPrice)
+    val buttonAddCart: Button = itemView.findViewById(R.id.buttonAddCart)
 
 }
