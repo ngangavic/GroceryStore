@@ -44,7 +44,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:src="@drawable/ic_search_white"
-                    android:tint="@color/colorPrimaryDark" />
+                    app:tint="@color/colorPrimaryDark" />
 
                 <ImageView
                     android:id="@+id/imageViewList"
@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:src="@drawable/ic_list"
-                    android:tint="@color/colorPrimaryDark" />
+                    app:tint="@color/colorPrimaryDark" />
 
                 <ImageView
                     android:id="@+id/imageViewBasket"
@@ -60,7 +60,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:src="@drawable/ic_shopping_basket"
-                    android:tint="@color/colorPrimaryDark" />
+                    app:tint="@color/colorPrimaryDark" />
             </LinearLayout>
 
             <View
@@ -194,8 +194,8 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerViewCart"
                     android:layout_width="match_parent"
-                    android:layout_height="194dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toTopOf="@+id/layoutCartBottom"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/textView7" />
@@ -213,6 +213,7 @@
                     app:layout_constraintStart_toStartOf="parent" />
 
                 <LinearLayout
+                    android:id="@+id/layoutCartBottom"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/colorYellow"

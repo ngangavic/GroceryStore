@@ -16,10 +16,12 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
@@ -35,12 +37,14 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.ngangavictor.grocerystore.R
+import com.ngangavictor.grocerystore.adpters.CartAdapter
 import com.ngangavictor.grocerystore.adpters.SearchAdapter
 import com.ngangavictor.grocerystore.categories.account.AccountActivity
 import com.ngangavictor.grocerystore.categories.ui.cart.CartViewModel
 import com.ngangavictor.grocerystore.categories.ui.category.CategoryFragment
 import com.ngangavictor.grocerystore.categories.ui.home.HomeFragment
 import com.ngangavictor.grocerystore.login.LoginActivity
+import com.ngangavictor.grocerystore.models.Cart
 import com.ngangavictor.grocerystore.models.CategoryModel
 import com.ngangavictor.grocerystore.utils.CircleImageView
 import com.ngangavictor.grocerystore.utils.LocalStoragePrefs
@@ -87,8 +91,10 @@ class CategoriesActivity : AppCompatActivity() {
     private lateinit var editTextTextSearch: EditText
 
     private lateinit var searchList: MutableList<CategoryModel>
+    private lateinit var cartList: MutableList<Cart>
 
     private lateinit var searchAdapter: SearchAdapter
+    private lateinit var cartAdapter: CartAdapter
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -124,6 +130,7 @@ class CategoriesActivity : AppCompatActivity() {
         editTextTextSearch = findViewById(R.id.editTextTextSearch)
 
         searchList = ArrayList()
+        cartList = ArrayList()
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
@@ -220,6 +227,26 @@ class CategoriesActivity : AppCompatActivity() {
 
         setProfileImage()
 
+    }
+
+    private fun cart() {
+
+        recyclerViewCart.layoutManager = LinearLayoutManager(this)
+        recyclerViewCart.setHasFixedSize(true)
+
+        cartViewModel.allCartItems.observe(this, Observer {
+            cartList = it as MutableList<Cart>
+
+            cartAdapter = CartAdapter(
+                this,
+                cartList as ArrayList<Cart>
+            )
+
+            cartAdapter.notifyDataSetChanged()
+
+            recyclerViewCart.adapter = cartAdapter
+            recyclerViewCart.visibility = View.VISIBLE
+        })
     }
 
     private fun search() {
@@ -349,6 +376,8 @@ class CategoriesActivity : AppCompatActivity() {
 
         imageViewBasket.setOnClickListener {
 
+            cartList.clear()
+
             DrawableCompat.setTint(
                 imageViewSearch.drawable, ContextCompat.getColor(
                     applicationContext, R.color.colorPrimaryDark
@@ -370,6 +399,12 @@ class CategoriesActivity : AppCompatActivity() {
             layoutSearch.visibility = View.GONE
             layoutList.visibility = View.GONE
             layoutCart.visibility = View.VISIBLE
+
+            bottomRootLayout.setBackgroundColor(resources.getColor(R.color.colorWhite))
+            val textView7 = findViewById<TextView>(R.id.textView7)
+            textView7.setTextColor(resources.getColor(R.color.colorBlack))
+
+            cart()
         }
 
         floatingActionButtonCancelCart.setOnClickListener {
