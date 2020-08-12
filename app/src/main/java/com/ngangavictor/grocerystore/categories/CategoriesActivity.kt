@@ -376,8 +376,6 @@ class CategoriesActivity : AppCompatActivity() {
 
         imageViewBasket.setOnClickListener {
 
-            cartList.clear()
-
             DrawableCompat.setTint(
                 imageViewSearch.drawable, ContextCompat.getColor(
                     applicationContext, R.color.colorPrimaryDark
