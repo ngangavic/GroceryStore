@@ -16,8 +16,8 @@ class CartRepository(private val cartDao: CartDao) {
         cartDao.clearCart()
     }
 
-    fun deleteCartItem(cart: Cart) {
-        cartDao.deleteCartItem(cart)
+    fun deleteCartItem(key: String) {
+        cartDao.deleteCartItem(key)
     }
 
     fun updateCartItem(key: String, prodQuantity: Int) {

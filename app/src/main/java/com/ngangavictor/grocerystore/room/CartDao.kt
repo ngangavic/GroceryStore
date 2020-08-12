@@ -16,8 +16,8 @@ interface CartDao {
     @Query("DELETE FROM cart_table")
     fun clearCart()
 
-    @Delete
-    fun deleteCartItem(cart: Cart)
+    @Query("DELETE FROM cart_table WHERE `key`=:key")
+    fun deleteCartItem(key: String)
 
     @Query("UPDATE cart_table SET prodQuantity=:prodQuantity WHERE `key`=:key")
     fun updateCartItem(key: String, prodQuantity: Int)

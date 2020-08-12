@@ -28,8 +28,8 @@ class CartViewModel(application: Application) : AndroidViewModel(application) {
         cartRepository.addToCart(cart)
     }
 
-    fun deleteCartItem(cart: Cart) = viewModelScope.launch(Dispatchers.IO) {
-        cartRepository.deleteCartItem(cart)
+    fun deleteCartItem(key: String) = viewModelScope.launch(Dispatchers.IO) {
+        cartRepository.deleteCartItem(key)
     }
 
     fun clearCart() = viewModelScope.launch(Dispatchers.IO) {
@@ -38,6 +38,17 @@ class CartViewModel(application: Application) : AndroidViewModel(application) {
 
     fun updateCartItem(key: String, prodQuantity: Int) = viewModelScope.launch(Dispatchers.IO) {
         cartRepository.updateCartItem(key, prodQuantity)
+        checkItemQuantity(key)
+    }
+
+    suspend fun subCartItem(key: String){
+        updateCartItem(key,(getCartItemQuantity(key)-1))
+    }
+
+    private suspend fun checkItemQuantity(key: String){
+        if (getCartItemQuantity(key)<1){
+            deleteCartItem(key)
+        }
     }
 
     suspend fun checkIfItemExists(key: String): Boolean = withContext(Dispatchers.Default) {

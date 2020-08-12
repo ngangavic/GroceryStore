@@ -60,9 +60,40 @@ class CartAdapter(
 
             })
         holder.textViewTotalItemPrice.text=(cart[position].prodPrice.toInt()*cart[position].prodQuantity).toString()
-        holder.imageViewRemove.setOnClickListener {  }
-        holder.textViewAdd.setOnClickListener {  }
-        holder.textViewSubtract.setOnClickListener {  }
+        holder.imageViewRemove.setOnClickListener {
+            CategoriesActivity.cartViewModel.deleteCartItem(cart[position].key)
+        }
+        holder.textViewAdd.setOnClickListener {
+            val ac = context as Activity
+
+            GlobalScope.launch {
+                    //update qty
+                    CategoriesActivity.cartViewModel.updateCartItem(
+                        cart[position].key,
+                        CategoriesActivity.cartViewModel.getCartItemQuantity(cart[position].key) + 1
+                    )
+                    Snackbar.make(
+                        ac.findViewById(android.R.id.content),
+                        "Quantity updated",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+            }
+        }
+        holder.textViewSubtract.setOnClickListener {
+            val ac = context as Activity
+
+            GlobalScope.launch {
+
+                CategoriesActivity.cartViewModel.subCartItem(cart[position].key)
+
+                Snackbar.make(
+                    ac.findViewById(android.R.id.content),
+                    "Quantity updated",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+
+            }
+        }
         holder.textViewQty.text=cart[position].prodQuantity.toString()
 
     }
