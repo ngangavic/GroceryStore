@@ -184,15 +184,22 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        loadingAlert()
         if (auth.currentUser != null) {
-            loadingAlert()
             if (auth.currentUser!!.isEmailVerified) {
                 completeProfile()
             } else {
                 auth.currentUser!!.sendEmailVerification()
                 auth.signOut()
                 alert.cancel()
+                Snackbar.make(
+                    findViewById(android.R.id.content),
+                    "Please verify your email",
+                    Snackbar.LENGTH_LONG
+                ).show()
             }
+        }else{
+            alert.dismiss()
         }
     }
 

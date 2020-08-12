@@ -187,6 +187,8 @@ class MainActivity : AppCompatActivity() {
                     Snackbar.LENGTH_LONG
                 ).show()
             }
+        }else{
+            alert.dismiss()
         }
     }
 
