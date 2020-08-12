@@ -19,8 +19,8 @@ interface CartDao {
     @Query("DELETE FROM cart_table WHERE `key`=:key")
     fun deleteCartItem(key: String)
 
-    @Query("UPDATE cart_table SET prodQuantity=:prodQuantity WHERE `key`=:key")
-    fun updateCartItem(key: String, prodQuantity: Int)
+    @Query("UPDATE cart_table SET prodQuantity=:prodQuantity, prodTotal=:prodTotal WHERE `key`=:key")
+    fun updateCartItem(key: String, prodQuantity: Int,prodTotal:Int)
 
     @Query("SELECT * FROM cart_table")
     fun getAllCartItems(): LiveData<List<Cart>>
@@ -31,4 +31,6 @@ interface CartDao {
     @Query("SELECT prodQuantity FROM cart_table WHERE `key`=:key")
     fun getCartItemQuantity(key: String): Int
 
+    @Query("SELECT COALESCE(sum(COALESCE(prodTotal,0)), 0) From cart_table")
+    fun getTotalPrice():LiveData<Int>
 }

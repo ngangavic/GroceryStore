@@ -3,6 +3,7 @@ package com.ngangavictor.grocerystore.models
 import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "cart_table")
@@ -32,13 +33,17 @@ class Cart {
     @ColumnInfo(name = "prodImage")
     var prodImage: String
 
+    @ColumnInfo(name = "prodTotal")
+    var prodTotal:String
+
     constructor(
         key: String,
         prodName: String,
         prodDesc: String,
         prodPrice: String,
         prodQuantity: Int,
-        prodImage: String
+        prodImage: String,
+        prodTotal: String
     ) {
         this.key = key
         this.prodName = prodName
@@ -46,5 +51,6 @@ class Cart {
         this.prodPrice = prodPrice
         this.prodQuantity = prodQuantity
         this.prodImage = prodImage
+        this.prodTotal = prodTotal
     }
 }

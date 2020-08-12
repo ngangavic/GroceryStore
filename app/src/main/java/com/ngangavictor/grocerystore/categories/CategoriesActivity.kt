@@ -51,6 +51,8 @@ import com.ngangavictor.grocerystore.utils.LocalStoragePrefs
 import com.squareup.picasso.Callback
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.*
 
 class CategoriesActivity : AppCompatActivity() {
@@ -58,6 +60,7 @@ class CategoriesActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     private lateinit var textViewTitle: TextView
+    private lateinit var textViewTotalPrice: TextView
 
     private lateinit var imageViewOpenDrawer: ImageView
     private lateinit var imageViewNotifications: ImageView
@@ -118,6 +121,8 @@ class CategoriesActivity : AppCompatActivity() {
         gridViewSearch = findViewById(R.id.gridViewSearch)
         recyclerViewList = findViewById(R.id.recyclerViewList)
         recyclerViewCart = findViewById(R.id.recyclerViewCart)
+
+        textViewTotalPrice=findViewById(R.id.textViewTotalPrice)
 
         auth = Firebase.auth
         database = Firebase.database
@@ -213,6 +218,7 @@ class CategoriesActivity : AppCompatActivity() {
                     }
                     R.id.nav_logout -> {
                         localStoragePrefs.clearAccDetailsPref()
+                        cartViewModel.clearCart()
                         auth.signOut()
                         startActivity(Intent(this@CategoriesActivity, LoginActivity::class.java))
                         finish()
@@ -401,6 +407,10 @@ class CategoriesActivity : AppCompatActivity() {
             bottomRootLayout.setBackgroundColor(resources.getColor(R.color.colorWhite))
             val textView7 = findViewById<TextView>(R.id.textView7)
             textView7.setTextColor(resources.getColor(R.color.colorBlack))
+
+            cartViewModel.getTotalPrice.observe(this, Observer {
+                textViewTotalPrice.text=it.toString()
+            })
 
             cart()
         }

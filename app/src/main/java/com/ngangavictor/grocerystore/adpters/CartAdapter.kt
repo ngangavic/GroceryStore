@@ -68,10 +68,11 @@ class CartAdapter(
 
             GlobalScope.launch {
                     //update qty
+                val qty=CategoriesActivity.cartViewModel.getCartItemQuantity(cart[position].key) + 1
                     CategoriesActivity.cartViewModel.updateCartItem(
                         cart[position].key,
-                        CategoriesActivity.cartViewModel.getCartItemQuantity(cart[position].key) + 1
-                    )
+                        qty,
+                        cart[position].prodPrice.toInt()*qty)
                     Snackbar.make(
                         ac.findViewById(android.R.id.content),
                         "Quantity updated",
@@ -84,7 +85,9 @@ class CartAdapter(
 
             GlobalScope.launch {
 
-                CategoriesActivity.cartViewModel.subCartItem(cart[position].key)
+                val qty=cart[position].prodQuantity-1
+                val price=cart[position].prodPrice.toInt()
+                CategoriesActivity.cartViewModel.subCartItem(cart[position].key,(qty*price))
 
                 Snackbar.make(
                     ac.findViewById(android.R.id.content),

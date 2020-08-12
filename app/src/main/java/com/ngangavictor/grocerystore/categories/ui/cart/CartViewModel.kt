@@ -17,11 +17,13 @@ class CartViewModel(application: Application) : AndroidViewModel(application) {
     private val cartRepository: CartRepository
     val allCartItems: LiveData<List<Cart>>
     var cartDao: CartDao
+    val getTotalPrice:LiveData<Int>
 
     init {
         cartDao = CartRoomDatabase.getDatabase(application).cartDao()
         cartRepository = CartRepository(cartDao)
         allCartItems = cartRepository.allCartItems
+        getTotalPrice=cartRepository.getTotalPrice
     }
 
     fun addCartItem(cart: Cart) = viewModelScope.launch(Dispatchers.IO) {
@@ -36,13 +38,13 @@ class CartViewModel(application: Application) : AndroidViewModel(application) {
         cartRepository.clearCart()
     }
 
-    fun updateCartItem(key: String, prodQuantity: Int) = viewModelScope.launch(Dispatchers.IO) {
-        cartRepository.updateCartItem(key, prodQuantity)
+    fun updateCartItem(key: String, prodQuantity: Int,prodTotal:Int) = viewModelScope.launch(Dispatchers.IO) {
+        cartRepository.updateCartItem(key, prodQuantity,prodTotal)
         checkItemQuantity(key)
     }
 
-    suspend fun subCartItem(key: String){
-        updateCartItem(key,(getCartItemQuantity(key)-1))
+    suspend fun subCartItem(key: String,prodTotal:Int){
+        updateCartItem(key,(getCartItemQuantity(key)-1),prodTotal)
     }
 
     private suspend fun checkItemQuantity(key: String){
@@ -58,5 +60,9 @@ class CartViewModel(application: Application) : AndroidViewModel(application) {
     suspend fun getCartItemQuantity(key: String): Int = withContext(Dispatchers.Default) {
         cartRepository.getCartItemQuantity(key)
     }
+
+//    suspend fun getTotalPrice():String= withContext(Dispatchers.Default){
+//      cartRepository.getTotalPrice()
+//    }
 
 }

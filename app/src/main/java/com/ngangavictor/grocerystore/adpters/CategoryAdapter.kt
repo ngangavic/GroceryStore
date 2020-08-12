@@ -63,10 +63,11 @@ class CategoryAdapter(val context: Context, private val productList: ArrayList<C
 
                 if (CategoriesActivity.cartViewModel.checkIfItemExists(productList[position].key)) {
                     //update
+                    val qty=CategoriesActivity.cartViewModel.getCartItemQuantity(productList[position].key) + 1
                     CategoriesActivity.cartViewModel.updateCartItem(
                         productList[position].key,
-                        CategoriesActivity.cartViewModel.getCartItemQuantity(productList[position].key) + 1
-                    )
+                        qty,
+                        productList[position].productPrice.toInt()*qty)
                     Snackbar.make(
                         ac.findViewById(android.R.id.content),
                         "Cart updated",
@@ -81,7 +82,8 @@ class CategoryAdapter(val context: Context, private val productList: ArrayList<C
                             productList[position].productDesc,
                             productList[position].productPrice,
                             1,
-                            productList[position].productImage
+                            productList[position].productImage,
+                            productList[position].productPrice
                         )
                     )
                     Snackbar.make(

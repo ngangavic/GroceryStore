@@ -71,9 +71,11 @@ class CategoriesAdapter(
 
                 if (CategoriesActivity.cartViewModel.checkIfItemExists(products[position].key)) {
                     //update
+                    val qty=CategoriesActivity.cartViewModel.getCartItemQuantity(products[position].key) + 1
                     CategoriesActivity.cartViewModel.updateCartItem(
                         products[position].key,
-                        CategoriesActivity.cartViewModel.getCartItemQuantity(products[position].key) + 1
+                        qty,
+                        products[position].productPrice.toInt()*qty
                     )
                     Snackbar.make(
                         ac.findViewById(android.R.id.content),
@@ -89,7 +91,8 @@ class CategoriesAdapter(
                             products[position].productDesc,
                             products[position].productPrice,
                             1,
-                            products[position].productImage
+                            products[position].productImage,
+                            products[position].productPrice
                         )
                     )
                     Snackbar.make(
